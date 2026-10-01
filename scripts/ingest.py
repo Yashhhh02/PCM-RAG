@@ -16,6 +16,10 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 # Load environment variables
 load_dotenv(".env.local")
 
+class QuotaExceededError(Exception):
+    pass
+
+
 def get_supabase_client() -> Client:
     url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
     key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
@@ -109,6 +113,8 @@ def get_embeddings_in_batches(gemini_client: genai.Client, chunks: list, batch_s
                 error_str = str(e).lower()
                 logging.warning(f"Embedding batch {i//batch_size + 1} failed (attempt {attempt+1}/{retries}): {e}")
                 if attempt == retries - 1:
+                    if '429' in error_str or 'quota' in error_str or 'too many' in error_str:
+                        raise QuotaExceededError("Daily quota reached, run again tomorrow")
                     logging.error("Max retries reached for embedding batch.")
                     raise e
                 
@@ -179,6 +185,8 @@ def process_pdf(filepath: str, args, supabase: Client, gemini_client: genai.Clie
     logging.info("Starting embedding generation...")
     try:
         embeddings = get_embeddings_in_batches(gemini_client, all_chunks, batch_size=5)
+    except QuotaExceededError as e:
+        raise e
     except Exception as e:
         logging.error(f"Aborting insertion for {chapter} due to embedding failure.")
         return
@@ -250,7 +258,11 @@ def main():
     logging.info(f"Found {len(pdf_files)} PDF(s) to process.")
     
     for filepath in pdf_files:
-        process_pdf(filepath, args, supabase, gemini_client)
+        try:
+            process_pdf(filepath, args, supabase, gemini_client)
+        except QuotaExceededError as e:
+            logging.error(f"SCRIPT STOPPED: {e}")
+            break
 
 if __name__ == "__main__":
     main()

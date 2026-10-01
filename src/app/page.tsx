@@ -102,7 +102,7 @@ export default function Home() {
           >
             <option value="physics">Physics</option>
             <option value="chemistry">Chemistry</option>
-            <option value="maths">Mathematics</option>
+            <option value="maths" disabled>Mathematics (coming soon)</option>
           </select>
 
           <select
