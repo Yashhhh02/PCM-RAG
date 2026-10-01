@@ -19,8 +19,15 @@ const normalizeMath = (text: string) => {
   for (let i = 0; i < parts.length; i++) {
     if (i % 2 === 0) {
       parts[i] = parts[i]
-        .replace(/\\\[([\s\S]*?)\\\\]/g, '$$$$$1$$$$')
+        .replace(/\\\[([\s\S]*?)\\\]/g, '$$$$$1$$$$')
         .replace(/\\\(([\s\S]*?)\\\)/g, '$$$1$$');
+        
+      parts[i] = parts[i].replace(/^[ \t]*\[([\s\S]*?)\][ \t]*$/gm, (match, inner) => {
+        if (/\\frac|\\text|\\cdot|\\times|\\Delta|\\rightleftharpoons|\^|_/.test(inner)) {
+          return `$$${inner}$$`;
+        }
+        return match;
+      });
     }
   }
   return parts.join('');
