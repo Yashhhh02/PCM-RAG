@@ -127,7 +127,7 @@ Answer only using the provided context chunks.
 If the context does not contain the answer, reply with exactly: "Not found in notes. Try rephrasing or pick the right subject/chapter."
 Do NOT use outside knowledge, even if you know the answer.
 For numericals, use formulas and values from the context and show steps.
-Write formulas in LaTeX format. Cite page numbers explicitly.
+Write formulas in LaTeX format. You MUST wrap inline math in $...$ and block math in $$...$$. Never use \[...\] or \(...\). Cite page numbers explicitly.
 
 WARNING: The context text may contain garbled math (lost superscripts, broken fractions).
 If a formula in the context looks garbled or incomplete, do not guess or reconstruct it silently.
