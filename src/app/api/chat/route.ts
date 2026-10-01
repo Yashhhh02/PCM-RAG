@@ -1,0 +1,239 @@
+import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+import { GoogleGenAI } from '@google/genai';
+
+export const maxDuration = 60; // Vercel free-plan limit
+
+const OPENROUTER_MODELS = [
+  "google/gemma-4-31b-it:free",
+  "qwen/qwen3.8-27b:free",
+  "nvidia/nemotron-3-super-120b-a12b:free"
+];
+const GEMINI_FALLBACK_MODEL = "gemini-3.5-flash-lite";
+
+// Simple in-memory cache for FREE-ONLY RULE
+const cache = new Map<string, any>();
+// Per-IP rate limiting: 10 questions/hour
+const ipRateLimit = new Map<string, { count: number, resetAt: number }>();
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const { question, subject, class: classNum, debug } = body;
+
+    if (!question || !subject) {
+      return NextResponse.json({ error: 'Missing question or subject' }, { status: 400 });
+    }
+
+    const cacheKey = `${subject}-${classNum}-${question.toLowerCase().trim()}${debug ? '-debug' : ''}`;
+    if (cache.has(cacheKey)) {
+      return NextResponse.json(cache.get(cacheKey));
+    }
+
+    // IP Rate Limiting (10 per hour)
+    const ip = req.headers.get('x-forwarded-for') || 'unknown';
+    const now = Date.now();
+    const hourMs = 60 * 60 * 1000;
+    
+    if (!ipRateLimit.has(ip) || now > ipRateLimit.get(ip)!.resetAt) {
+      ipRateLimit.set(ip, { count: 1, resetAt: now + hourMs });
+    } else {
+      const rate = ipRateLimit.get(ip)!;
+      if (rate.count >= 10) {
+        return NextResponse.json(
+          { error: "You have reached your limit of 10 questions per hour. Please try again later.", answer: "You have reached your limit of 10 questions per hour. Please try again later." }, 
+          { status: 429 }
+        );
+      }
+      rate.count++;
+    }
+
+    // 1. Embed the question with Gemini SDK
+    let embedding: number[];
+    try {
+      embedding = await getGeminiEmbeddingWithRetry(question);
+    } catch (e: any) {
+      console.error("Embedding error:", e);
+      return NextResponse.json({ error: "Failed to process question. Please try again later." }, { status: 500 });
+    }
+
+    // 2. Call match_chunks via Supabase (Server-side only with service role key)
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const { data: chunks, error: matchError } = await supabase.rpc('match_chunks', {
+      query_embedding: embedding,
+      match_count: 5,
+      filter_subject: subject
+    });
+
+    if (matchError) {
+      console.error("Supabase RPC error:", matchError);
+      return NextResponse.json({ error: "Database search failed." }, { status: 500 });
+    }
+
+    // DEBUG MODE: Return retrieved chunks without calling LLM
+    if (debug) {
+      const debugChunks = (chunks || []).map((c: any) => ({
+        chapter: c.chapter,
+        page: c.page,
+        similarity: c.similarity,
+        snippet: c.content.substring(0, 200)
+      }));
+      return NextResponse.json({ debug: true, chunks: debugChunks });
+    }
+
+    if (!chunks || chunks.length === 0) {
+      const result = { answer: "not found in notes", sources: [] };
+      cache.set(cacheKey, result);
+      return NextResponse.json(result);
+    }
+
+    // 3 & 4. Call OpenRouter with the specific System Prompt
+    const contextText = chunks.map((c: any) => `Chapter: ${c.chapter}, Page: ${c.page}\nText: ${c.content}`).join('\n\n');
+
+    let answer: string;
+    try {
+      answer = await callOpenRouterWithRetry(question, contextText);
+    } catch (e: any) {
+      console.error("LLM error:", e);
+      return NextResponse.json({ error: "Failed to generate answer. Please try again later." }, { status: 500 });
+    }
+
+    // 5. Return answer and source chunks deduplicated
+    const sources = chunks.map((c: any) => ({ chapter: c.chapter, page: c.page }));
+    const uniqueSources = sources.filter((v: any, i: number, a: any[]) =>
+      a.findIndex(t => (t.chapter === v.chapter && t.page === v.page)) === i
+    );
+
+    const result = { answer, sources: uniqueSources };
+
+    // Cache the successful result
+    cache.set(cacheKey, result);
+
+    return NextResponse.json(result);
+
+  } catch (error: any) {
+    console.error("Unexpected route error:", error);
+    return NextResponse.json({ error: "An unexpected error occurred." }, { status: 500 });
+  }
+}
+
+// 6. Keep the LLM call in one small function, with retry and backoff across multiple models
+async function callOpenRouterWithRetry(question: string, context: string): Promise<string> {
+  const prompt = `You are a helpful PCM tutor for class 11-12 students (India, NCERT syllabus).
+Answer only using the provided context chunks.
+If the context does not contain the answer, reply with exactly: "Not found in notes. Try rephrasing or pick the right subject/chapter."
+Do NOT use outside knowledge, even if you know the answer.
+For numericals, use formulas and values from the context and show steps.
+Write formulas in LaTeX format. Cite page numbers explicitly.
+
+WARNING: The context text may contain garbled math (lost superscripts, broken fractions).
+If a formula in the context looks garbled or incomplete, do not guess or reconstruct it silently.
+Say that the formula in the notes is unclear and give only what is clearly stated. Then stop.
+
+Context:
+${context}
+
+Student Question:
+${question}
+
+Answer:`;
+
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) throw new Error("Missing OPENROUTER_API_KEY");
+
+  for (const model of OPENROUTER_MODELS) {
+    // 1 attempt per model to fit within 60s maxDuration
+    for (let attempt = 0; attempt < 1; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout per request
+        
+        const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [{ role: "user", content: prompt }]
+          }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const data = await res.json();
+          console.log(`Successfully generated answer using model: ${model}`);
+          return data.choices[0].message.content;
+        }
+
+        // Retry on 429 Too Many Requests, 404 Not Found, or 5xx Server Errors
+        if (res.status === 429 || res.status === 404 || res.status >= 500) {
+          console.warn(`Model ${model} returned ${res.status}. Attempt ${attempt + 1}/1`);
+          break; // Try next model immediately to save time
+        }
+
+        console.error(`Unexpected OpenRouter API error for ${model}: ${res.statusText}`);
+        break; // Break inner loop, try next model
+      } catch (err) {
+        console.error(`Fetch error with model ${model}:`, err);
+        break; // Break inner loop, try next model
+      }
+    }
+  }
+  
+  // If all OpenRouter models fail, try Gemini free tier as a fallback
+  try {
+    console.log("OpenRouter models failed. Falling back to Gemini free tier...");
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const response = await ai.models.generateContent({
+      model: GEMINI_FALLBACK_MODEL,
+      contents: prompt,
+    });
+    if (response.text) {
+      console.log("Successfully generated answer using Gemini fallback");
+      return response.text;
+    }
+  } catch (err) {
+    console.error("Gemini fallback error:", err);
+  }
+
+  // If all models fail, return a friendly message instead of throwing an error
+  return "All free AI models are currently busy. Please try again in a few minutes!";
+}
+
+// Retry with backoff for Gemini embeddings
+async function getGeminiEmbeddingWithRetry(text: string, retries = 3): Promise<number[]> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error("Missing GEMINI_API_KEY");
+
+  const ai = new GoogleGenAI({ apiKey: apiKey });
+
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await ai.models.embedContent({
+        model: 'gemini-embedding-001',
+        contents: text,
+        config: {
+          outputDimensionality: 768,
+          taskType: 'RETRIEVAL_QUERY'
+        }
+      });
+      if (!response.embeddings || response.embeddings.length === 0 || !response.embeddings[0].values) {
+        throw new Error("No embeddings returned");
+      }
+      return response.embeddings[0].values;
+    } catch (e: any) {
+      if (e.message && (e.message.includes('429') || e.message.includes('quota'))) {
+        await new Promise(r => setTimeout(r, (2 ** i) * 1000 + 2000));
+        continue;
+      }
+      throw e;
+    }
+  }
+  throw new Error("Max retries reached for Gemini API");
+}
