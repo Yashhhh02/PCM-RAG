@@ -12,6 +12,20 @@ type Message = {
   sources?: { chapter: string; page: number }[];
 };
 
+
+const normalizeMath = (text: string) => {
+  if (!text) return text;
+  let parts = text.split(/(```[\s\S]*?```|`[^`\n]+`)/g);
+  for (let i = 0; i < parts.length; i++) {
+    if (i % 2 === 0) {
+      parts[i] = parts[i]
+        .replace(/\\\[([\s\S]*?)\\\\]/g, '$$$$$1$$$$')
+        .replace(/\\\(([\s\S]*?)\\\)/g, '$$$1$$');
+    }
+  }
+  return parts.join('');
+};
+
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -176,7 +190,7 @@ export default function Home() {
                     remarkPlugins={[remarkMath]}
                     rehypePlugins={[rehypeKatex]}
                   >
-                    {msg.content}
+                    {normalizeMath(msg.content)}
                   </ReactMarkdown>
                 </div>
               )}
