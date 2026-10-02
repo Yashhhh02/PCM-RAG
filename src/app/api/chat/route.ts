@@ -2,6 +2,20 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { GoogleGenAI } from '@google/genai';
 
+function cleanupAnswer(text: string): string {
+  if (!text) return text;
+  const fallbackSentence = "Not found in notes. Try rephrasing or pick the right subject/chapter.";
+  if (text.includes(fallbackSentence)) {
+    const withoutSentence = text.replace(fallbackSentence, '').trim();
+    if (withoutSentence.length > 100) {
+      return withoutSentence;
+    } else {
+      return fallbackSentence;
+    }
+  }
+  return text;
+}
+
 export const maxDuration = 60; // Vercel free-plan limit
 
 const OPENROUTER_MODELS = [
@@ -27,7 +41,11 @@ export async function POST(req: Request) {
 
     const cacheKey = `${subject}-${classNum}-${question.toLowerCase().trim()}${debug ? '-debug' : ''}`;
     if (cache.has(cacheKey)) {
-      return NextResponse.json(cache.get(cacheKey));
+      const cached = cache.get(cacheKey);
+      if (cached && cached.answer) {
+        cached.answer = cleanupAnswer(cached.answer);
+      }
+      return NextResponse.json(cached);
     }
 
     // IP Rate Limiting (10 per hour)
@@ -96,6 +114,7 @@ export async function POST(req: Request) {
     let answer: string;
     try {
       answer = await callOpenRouterWithRetry(question, contextText);
+      answer = cleanupAnswer(answer);
     } catch (e: any) {
       console.error("LLM error:", e);
       return NextResponse.json({ error: "Failed to generate answer. Please try again later." }, { status: 500 });
@@ -125,6 +144,7 @@ async function callOpenRouterWithRetry(question: string, context: string): Promi
   const prompt = `You are a helpful PCM tutor for class 11-12 students (India, NCERT syllabus).
 Answer only using the provided context chunks.
 If the context does not contain the answer, reply with exactly: "Not found in notes. Try rephrasing or pick the right subject/chapter."
+Use the 'Not found in notes' sentence ONLY as your entire reply. Never add it after an answer.
 Do NOT use outside knowledge, even if you know the answer.
 For numericals, use formulas and values from the context and show steps.
 Write formulas in LaTeX format. You MUST wrap ALL math formulas in $$ (for block) or $ (for inline). For example: $$ K_c = \frac{[C]^c}{[A]^a} $$. NEVER use plain brackets like [...] or \[...\] for math blocks. Cite page numbers explicitly.
