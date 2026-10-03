@@ -5,13 +5,13 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
+import { supabase } from "@/lib/supabase";
 
 type Message = {
   role: "user" | "assistant";
   content: string;
   sources?: { chapter: string; page: number }[];
 };
-
 
 const normalizeMath = (text: string) => {
   if (!text) return text;
@@ -34,6 +34,18 @@ const normalizeMath = (text: string) => {
 };
 
 export default function Home() {
+  const [session, setSession] = useState<any>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  // Auth UI states
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [isLogin, setIsLogin] = useState(true);
+  const [role, setRole] = useState("student");
+  const [authError, setAuthError] = useState("");
+  const [authMsg, setAuthMsg] = useState("");
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [subject, setSubject] = useState("physics");
@@ -50,6 +62,55 @@ export default function Home() {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setIsAuthLoading(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError("");
+    setAuthMsg("");
+    
+    if (isLogin) {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) setAuthError(error.message);
+    } else {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+            role: role
+          }
+        }
+      });
+      if (error) {
+        setAuthError(error.message);
+      } else {
+        setAuthMsg("Registration successful! You can now log in.");
+        if (data.session) {
+            setSession(data.session);
+        }
+      }
+    }
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -57,7 +118,6 @@ export default function Home() {
     const userQuestion = input.trim();
     setInput("");
 
-    // Add user message to UI
     setMessages((prev) => [...prev, { role: "user", content: userQuestion }]);
     setIsLoading(true);
 
@@ -99,6 +159,79 @@ export default function Home() {
     "What is the formula for momentum?",
   ];
 
+  if (isAuthLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-slate-50">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="w-12 h-12 bg-blue-400 rounded-full mb-4"></div>
+          <p className="text-slate-500 font-medium">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 p-4">
+        <div className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-xl w-full max-w-md border border-slate-200">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-blue-500/30 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 text-white">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-800">Welcome to PCM Assistant</h1>
+            <p className="text-slate-500 text-sm mt-2">{isLogin ? "Sign in to your account" : "Create a new account"}</p>
+          </div>
+
+          <form onSubmit={handleAuth} className="space-y-4">
+            {!isLogin && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+                  <input type="text" required value={name} onChange={e => setName(e.target.value)} className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Enter your name" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Role</label>
+                  <select value={role} onChange={e => setRole(e.target.value)} className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                    <option value="student">Student</option>
+                    <option value="admin">Teacher / Admin</option>
+                  </select>
+                </div>
+              </>
+            )}
+            
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="you@example.com" />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+              <input type="password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="••••••••" />
+            </div>
+
+            {authError && <p className="text-red-500 text-sm text-center">{authError}</p>}
+            {authMsg && <p className="text-green-600 text-sm text-center">{authMsg}</p>}
+
+            <button type="submit" className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-xl hover:bg-blue-700 transition-colors shadow-md">
+              {isLogin ? "Sign In" : "Register"}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <button onClick={() => { setIsLogin(!isLogin); setAuthError(""); setAuthMsg(""); }} className="text-blue-600 text-sm font-medium hover:underline">
+              {isLogin ? "Need an account? Register here" : "Already have an account? Sign in"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const userName = session.user?.user_metadata?.full_name || "User";
+  const userRole = session.user?.user_metadata?.role || "student";
+
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 text-slate-900 font-sans selection:bg-blue-200">
 
@@ -110,30 +243,43 @@ export default function Home() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
             </svg>
           </div>
-          <h1 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 tracking-tight">
+          <h1 className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 tracking-tight hidden sm:block">
             PCM Assistant
           </h1>
         </div>
 
-        <div className="flex space-x-3 w-full sm:w-auto">
-          <select
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            className="flex-1 sm:flex-none border border-slate-200 rounded-xl px-4 py-2 text-sm bg-white/80 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium shadow-sm hover:shadow-md"
-          >
-            <option value="physics">Physics</option>
-            <option value="chemistry">Chemistry</option>
-            <option value="maths" disabled>Mathematics (coming soon)</option>
-          </select>
-
-          <select
-            value={classNum}
-            onChange={(e) => setClassNum(e.target.value)}
-            className="flex-1 sm:flex-none border border-slate-200 rounded-xl px-4 py-2 text-sm bg-white/80 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium shadow-sm hover:shadow-md"
-          >
-            <option value="11">Class 11</option>
-            <option value="12">Class 12</option>
-          </select>
+        <div className="flex space-x-3 w-full sm:w-auto items-center justify-between sm:justify-end">
+          <div className="flex space-x-3">
+            <select
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              className="flex-1 sm:flex-none border border-slate-200 rounded-xl px-4 py-2 text-sm bg-white/80 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium shadow-sm hover:shadow-md"
+            >
+              <option value="physics">Physics</option>
+              <option value="chemistry">Chemistry</option>
+              <option value="maths" disabled>Mathematics</option>
+            </select>
+            <select
+              value={classNum}
+              onChange={(e) => setClassNum(e.target.value)}
+              className="flex-1 sm:flex-none border border-slate-200 rounded-xl px-4 py-2 text-sm bg-white/80 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium shadow-sm hover:shadow-md"
+            >
+              <option value="11">Class 11</option>
+              <option value="12">Class 12</option>
+            </select>
+          </div>
+          
+          <div className="flex items-center gap-3 ml-2 border-l pl-3 border-slate-200">
+             <div className="text-right hidden md:block">
+               <p className="text-sm font-bold text-slate-700 leading-tight">{userName}</p>
+               <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">{userRole}</p>
+             </div>
+             <button onClick={handleLogout} className="text-slate-500 hover:text-red-500 transition-colors p-2 rounded-full hover:bg-slate-100" title="Logout">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+             </button>
+          </div>
         </div>
       </header>
 
@@ -147,7 +293,7 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold text-slate-800 mb-3 text-center">How can I help you learn?</h2>
+            <h2 className="text-3xl font-bold text-slate-800 mb-3 text-center">Hi, {userName}!</h2>
             <p className="text-slate-500 text-center max-w-md mb-8">
               Select your subject and class above, then ask me any question from the NCERT syllabus.
             </p>
@@ -172,7 +318,6 @@ export default function Home() {
         {messages.map((msg, idx) => (
           <div key={idx} className={`flex flex-col max-w-[90%] sm:max-w-[85%] ${msg.role === 'user' ? 'self-end items-end' : 'self-start items-start'}`}>
 
-            {/* Avatar for Assistant */}
             {msg.role === 'assistant' && (
               <div className="flex items-center gap-2 mb-1.5 ml-1">
                 <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center shadow-sm">
@@ -204,7 +349,6 @@ export default function Home() {
 
             </div>
 
-            {/* Citations/Sources */}
             {msg.role === 'assistant' && msg.sources && msg.sources.length > 0 && (
               <div className="mt-2.5 ml-1 flex flex-wrap gap-2 items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-slate-400">
