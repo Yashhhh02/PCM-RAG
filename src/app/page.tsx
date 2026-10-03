@@ -42,7 +42,6 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [isLogin, setIsLogin] = useState(true);
-  const [role, setRole] = useState("student");
   const [authError, setAuthError] = useState("");
   const [authMsg, setAuthMsg] = useState("");
 
@@ -86,13 +85,16 @@ export default function Home() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setAuthError(error.message);
     } else {
+      const isMainAdmin = email.toLowerCase().trim() === "vishwakarmayash425@gmail.com";
+      const finalRole = isMainAdmin ? "admin" : "student";
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             full_name: name,
-            role: role
+            role: finalRole
           }
         }
       });
@@ -190,13 +192,6 @@ export default function Home() {
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
                   <input type="text" required value={name} onChange={e => setName(e.target.value)} className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-900 bg-white" placeholder="Enter your name" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Role</label>
-                  <select value={role} onChange={e => setRole(e.target.value)} className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white text-slate-900">
-                    <option value="student">Student</option>
-                    <option value="admin">Teacher / Admin</option>
-                  </select>
                 </div>
               </>
             )}
