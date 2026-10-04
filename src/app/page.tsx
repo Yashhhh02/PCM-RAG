@@ -175,6 +175,26 @@ export default function Home() {
     await supabase.auth.signOut();
   };
 
+  const handleResetPassword = async () => {
+    if (!email.trim()) {
+      setAuthError("Please enter your email to reset password.");
+      return;
+    }
+    setAuthMsg("Sending reset link...");
+    setAuthError("");
+    
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin,
+    });
+    
+    if (error) {
+      setAuthError(error.message);
+      setAuthMsg("");
+    } else {
+      setAuthMsg("Password reset link sent to your email!");
+    }
+  };
+
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -341,7 +361,7 @@ export default function Home() {
                     <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer transition-colors" />
                     <span className="text-slate-600 font-medium group-hover:text-slate-800 transition-colors">Remember Me</span>
                   </label>
-                  <button type="button" className="text-blue-600 font-semibold hover:text-blue-700 hover:underline transition-all">
+                  <button type="button" onClick={handleResetPassword} className="text-blue-600 font-semibold hover:text-blue-700 hover:underline transition-all">
                     Forgot Password?
                   </button>
                 </div>
