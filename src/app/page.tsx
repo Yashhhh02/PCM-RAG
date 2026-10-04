@@ -40,10 +40,16 @@ export default function Home() {
   // Auth UI states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
+  const [schoolName, setSchoolName] = useState("");
+  const [studentClass, setStudentClass] = useState("Class 11");
+  const [accessCode, setAccessCode] = useState("");
   const [isLogin, setIsLogin] = useState(true);
+  const [loginRole, setLoginRole] = useState<"student" | "teacher" | "admin">("student");
   const [authError, setAuthError] = useState("");
   const [authMsg, setAuthMsg] = useState("");
+  const [isCheckingRole, setIsCheckingRole] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -82,11 +88,30 @@ export default function Home() {
     setAuthMsg("");
     
     if (isLogin) {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) setAuthError(error.message);
+      setIsCheckingRole(true);
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setAuthError(error.message);
+        setIsCheckingRole(false);
+      } else {
+        const actualRole = data.user?.user_metadata?.role || "student";
+        if (actualRole !== loginRole) {
+          await supabase.auth.signOut();
+          setAuthError(`Incorrect login portal. You are registered as a ${actualRole}. Please select the ${actualRole.toUpperCase()} tab to log in.`);
+        }
+        setIsCheckingRole(false);
+      }
     } else {
-      const isMainAdmin = email.toLowerCase().trim() === "vishwakarmayash425@gmail.com";
-      const finalRole = isMainAdmin ? "admin" : "student";
+      let finalRole = loginRole;
+      if (loginRole === "admin" && email.toLowerCase().trim() !== "vishwakarmayash425@gmail.com") {
+        setAuthError("You are not authorized to create an Admin account.");
+        return;
+      }
+      
+      if (loginRole === "teacher" && accessCode !== "TEACHER2026") {
+        setAuthError("Invalid Teacher Access Code. Registration denied.");
+        return;
+      }
 
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -94,7 +119,8 @@ export default function Home() {
         options: {
           data: {
             full_name: name,
-            role: finalRole
+            role: finalRole,
+            ...(loginRole === "student" && { school_name: schoolName, class: studentClass })
           }
         }
       });
@@ -172,52 +198,150 @@ export default function Home() {
     );
   }
 
-  if (!session) {
+  if (!session || isCheckingRole) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 p-4">
-        <div className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-xl w-full max-w-md border border-slate-200">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-blue-500/30 mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 text-white">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-              </svg>
-            </div>
-            <h1 className="text-2xl font-bold text-slate-800">Welcome to PCM Assistant</h1>
-            <p className="text-slate-500 text-sm mt-2">{isLogin ? "Sign in to your account" : "Create a new account"}</p>
-          </div>
+        <div className="bg-white/90 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl w-full max-w-md border border-slate-100 relative overflow-hidden">
+          
+          {/* Decorative Background Elements */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full blur-3xl -mr-10 -mt-10 opacity-60"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-50 rounded-full blur-3xl -ml-10 -mb-10 opacity-60"></div>
 
-          <form onSubmit={handleAuth} className="space-y-4">
-            {!isLogin && (
-              <>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
-                  <input type="text" required value={name} onChange={e => setName(e.target.value)} className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-900 bg-white" placeholder="Enter your name" />
+          <div className="relative z-10">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-blue-500/30 mb-4 transform hover:scale-105 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 text-white">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                </svg>
+              </div>
+              <h1 className="text-2xl font-bold text-slate-800 tracking-tight">PCM Assistant</h1>
+              <p className="text-slate-500 font-medium mt-1">Welcome Back</p>
+            </div>
+
+            {/* Role Selection Tabs */}
+            <div className="flex bg-slate-100/80 p-1 rounded-xl mb-6 shadow-inner">
+              {(['student', 'teacher', 'admin'] as const).map((r) => (
+                <button
+                  key={r}
+                  onClick={() => setLoginRole(r)}
+                  className={`flex-1 text-sm font-semibold py-2 rounded-lg transition-all capitalize ${
+                    loginRole === r 
+                      ? 'bg-white text-blue-600 shadow-sm' 
+                      : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                  }`}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+
+            <form onSubmit={handleAuth} className="space-y-4">
+              {!isLogin && (
+                <div className="space-y-4 animate-fade-in-up">
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full Name</label>
+                    <input type="text" required value={name} onChange={e => setName(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all placeholder:text-slate-400" placeholder="Enter your full name" />
+                  </div>
+                  
+                  {loginRole === "student" && (
+                    <>
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">School / College Name</label>
+                        <input type="text" required value={schoolName} onChange={e => setSchoolName(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all placeholder:text-slate-400" placeholder="e.g. KV No. 1" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Class / Standard</label>
+                        <select value={studentClass} onChange={e => setStudentClass(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all">
+                          <option value="Class 11">Class 11</option>
+                          <option value="Class 12">Class 12</option>
+                          <option value="Dropper">Dropper (JEE/NEET)</option>
+                        </select>
+                      </div>
+                    </>
+                  )}
+
+                  {loginRole === "teacher" && (
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-1.5">Teacher Access Code</label>
+                      <input type="text" required value={accessCode} onChange={e => setAccessCode(e.target.value)} className="w-full px-4 py-2.5 border border-amber-300 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none text-slate-900 bg-amber-50/50 backdrop-blur-sm transition-all placeholder:text-slate-400" placeholder="Ask your admin for the code" />
+                    </div>
+                  )}
                 </div>
-              </>
-            )}
-            
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-900 bg-white" placeholder="you@example.com" />
+              )}
+              
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email / Username</label>
+                <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all placeholder:text-slate-400" placeholder="name@example.com" />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                <div className="relative">
+                  <input type={showPassword ? "text" : "password"} required value={password} onChange={e => setPassword(e.target.value)} className="w-full pl-4 pr-12 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all placeholder:text-slate-400 tracking-wide" placeholder="••••••••" />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1">
+                    {showPassword ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {isLogin && (
+                <div className="flex items-center justify-between text-sm pt-1">
+                  <label className="flex items-center gap-2 cursor-pointer group">
+                    <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer transition-colors" />
+                    <span className="text-slate-600 font-medium group-hover:text-slate-800 transition-colors">Remember Me</span>
+                  </label>
+                  <button type="button" className="text-blue-600 font-semibold hover:text-blue-700 hover:underline transition-all">
+                    Forgot Password?
+                  </button>
+                </div>
+              )}
+
+              {authError && (
+                <div className="bg-red-50 text-red-600 px-4 py-3 rounded-xl border border-red-100 text-sm font-medium flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 flex-shrink-0">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                  </svg>
+                  {authError}
+                </div>
+              )}
+              
+              {authMsg && (
+                <div className="bg-green-50 text-green-700 px-4 py-3 rounded-xl border border-green-100 text-sm font-medium flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 flex-shrink-0">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                  </svg>
+                  {authMsg}
+                </div>
+              )}
+
+              <button type="submit" disabled={isCheckingRole} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg active:scale-[0.98] mt-2 disabled:opacity-70 flex justify-center items-center gap-2">
+                {isCheckingRole && (
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                )}
+                {isCheckingRole ? "Verifying..." : isLogin ? `Login as ${loginRole.charAt(0).toUpperCase() + loginRole.slice(1)}` : "Create Account"}
+              </button>
+            </form>
+
+            <div className="mt-6 text-center border-t border-slate-100 pt-6">
+              <button onClick={() => { setIsLogin(!isLogin); setAuthError(""); setAuthMsg(""); }} className="text-slate-500 text-sm font-medium hover:text-blue-600 transition-colors">
+                {isLogin ? "Need an account? " : "Already have an account? "}
+                <span className="font-bold text-blue-600 hover:underline">
+                  {isLogin ? "Register here" : "Sign in"}
+                </span>
+              </button>
             </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
-              <input type="password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-900 bg-white" placeholder="••••••••" />
-            </div>
-
-            {authError && <p className="text-red-500 text-sm text-center">{authError}</p>}
-            {authMsg && <p className="text-green-600 text-sm text-center">{authMsg}</p>}
-
-            <button type="submit" className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-xl hover:bg-blue-700 transition-colors shadow-md">
-              {isLogin ? "Sign In" : "Register"}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <button onClick={() => { setIsLogin(!isLogin); setAuthError(""); setAuthMsg(""); }} className="text-blue-600 text-sm font-medium hover:underline">
-              {isLogin ? "Need an account? Register here" : "Already have an account? Sign in"}
-            </button>
           </div>
         </div>
       </div>
@@ -226,6 +350,45 @@ export default function Home() {
 
   const userName = session.user?.user_metadata?.full_name || "User";
   const userRole = session.user?.user_metadata?.role || "student";
+
+  // Dashboard routing based on role
+  if (userRole === "teacher") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+        <div className="bg-white p-10 rounded-3xl shadow-xl max-w-lg text-center border border-slate-100">
+          <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+            </svg>
+          </div>
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">Teacher Dashboard</h1>
+          <p className="text-slate-500 mb-8">Welcome back, {userName}. The Teacher Dashboard is currently under construction.</p>
+          <button onClick={handleLogout} className="px-6 py-2.5 bg-slate-800 text-white font-medium rounded-xl hover:bg-slate-700 transition-colors">
+            Logout
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (userRole === "admin") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+        <div className="bg-white p-10 rounded-3xl shadow-xl max-w-lg text-center border border-slate-100">
+          <div className="w-20 h-20 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.492-3.053c.24-.294.415-.636.516-1.002.102-.367.118-.752.046-1.135-.072-.382-.236-.734-.476-1.03l1.083-1.324-3.114-3.114-1.324 1.083c-.296-.24-.648-.404-1.03-.476-.383-.072-.768-.056-1.135.046-.366.101-.708.276-1.002.516l-3.053 2.492A2.652 2.652 0 0015.17 11.42zM11.42 15.17L7.5 19.5" />
+            </svg>
+          </div>
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">Admin Dashboard</h1>
+          <p className="text-slate-500 mb-8">Welcome back, {userName}. The Admin Dashboard is currently under construction.</p>
+          <button onClick={handleLogout} className="px-6 py-2.5 bg-slate-800 text-white font-medium rounded-xl hover:bg-slate-700 transition-colors">
+            Logout
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 text-slate-900 font-sans selection:bg-blue-200">
