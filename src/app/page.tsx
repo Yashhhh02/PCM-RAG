@@ -6,6 +6,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { supabase } from "@/lib/supabase";
+import AdminDashboard from "@/components/AdminDashboard";
 
 type Message = {
   role: "user" | "assistant";
@@ -372,22 +373,7 @@ export default function Home() {
   }
 
   if (userRole === "admin") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-        <div className="bg-white p-10 rounded-3xl shadow-xl max-w-lg text-center border border-slate-100">
-          <div className="w-20 h-20 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.492-3.053c.24-.294.415-.636.516-1.002.102-.367.118-.752.046-1.135-.072-.382-.236-.734-.476-1.03l1.083-1.324-3.114-3.114-1.324 1.083c-.296-.24-.648-.404-1.03-.476-.383-.072-.768-.056-1.135.046-.366.101-.708.276-1.002.516l-3.053 2.492A2.652 2.652 0 0015.17 11.42zM11.42 15.17L7.5 19.5" />
-            </svg>
-          </div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">Admin Dashboard</h1>
-          <p className="text-slate-500 mb-8">Welcome back, {userName}. The Admin Dashboard is currently under construction.</p>
-          <button onClick={handleLogout} className="px-6 py-2.5 bg-slate-800 text-white font-medium rounded-xl hover:bg-slate-700 transition-colors">
-            Logout
-          </button>
-        </div>
-      </div>
-    );
+    return <AdminDashboard session={session} handleLogout={handleLogout} />;
   }
 
   return (
