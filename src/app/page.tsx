@@ -7,6 +7,7 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { supabase } from "@/lib/supabase";
 import AdminDashboard from "@/components/AdminDashboard";
+import TeacherDashboard from "@/components/TeacherDashboard";
 
 type Message = {
   role: "user" | "assistant";
@@ -57,6 +58,9 @@ export default function Home() {
   const [subject, setSubject] = useState("physics");
   const [classNum, setClassNum] = useState("11");
   const [isLoading, setIsLoading] = useState(false);
+  
+  const [credits, setCredits] = useState(20);
+  const [isRecording, setIsRecording] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -65,8 +69,39 @@ export default function Home() {
   };
 
   useEffect(() => {
+    if (session?.user?.email) {
+      const email = session.user.email;
+      const savedMessages = localStorage.getItem(`chat_${email}`);
+      const savedCredits = localStorage.getItem(`credits_${email}`);
+      if (savedMessages) setMessages(JSON.parse(savedMessages));
+      if (savedCredits) setCredits(parseInt(savedCredits));
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      localStorage.setItem(`chat_${session.user.email}`, JSON.stringify(messages));
+      localStorage.setItem(`credits_${session.user.email}`, credits.toString());
+    }
     scrollToBottom();
-  }, [messages]);
+  }, [messages, credits, session]);
+
+  const startVoiceInput = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) return alert("Voice input is not supported in this browser. Try Chrome.");
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-IN";
+    recognition.interimResults = false;
+    recognition.onstart = () => setIsRecording(true);
+    recognition.onresult = (event: any) => { setInput(event.results[0][0].transcript); setIsRecording(false); };
+    recognition.onerror = () => setIsRecording(false);
+    recognition.onend = () => setIsRecording(false);
+    recognition.start();
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -143,6 +178,12 @@ export default function Home() {
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!input.trim() || isLoading) return;
+
+    if (credits <= 0) {
+      setMessages((prev) => [...prev, { role: "assistant", content: "⚠️ You have run out of AI Credits for today. Please wait for tomorrow's top-up." }]);
+      return;
+    }
+    setCredits((prev) => prev - 1);
 
     const userQuestion = input.trim();
     setInput("");
@@ -354,22 +395,7 @@ export default function Home() {
 
   // Dashboard routing based on role
   if (userRole === "teacher") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-        <div className="bg-white p-10 rounded-3xl shadow-xl max-w-lg text-center border border-slate-100">
-          <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-            </svg>
-          </div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">Teacher Dashboard</h1>
-          <p className="text-slate-500 mb-8">Welcome back, {userName}. The Teacher Dashboard is currently under construction.</p>
-          <button onClick={handleLogout} className="px-6 py-2.5 bg-slate-800 text-white font-medium rounded-xl hover:bg-slate-700 transition-colors">
-            Logout
-          </button>
-        </div>
-      </div>
-    );
+    return <TeacherDashboard session={session} handleLogout={handleLogout} />;
   }
 
   if (userRole === "admin") {
@@ -380,7 +406,7 @@ export default function Home() {
     <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 text-slate-900 font-sans selection:bg-blue-200">
 
       {/* Header & Settings (Glassmorphism) */}
-      <header className="backdrop-blur-md bg-white/70 border-b border-slate-200/50 shadow-sm p-4 flex flex-col sm:flex-row items-center justify-between z-20 sticky top-0 gap-4 transition-all">
+      <header className="backdrop-blur-md bg-white/70 border-b border-slate-200/50 shadow-sm p-4 flex flex-col sm:flex-row items-center justify-between z-20 sticky top-0 gap-4 transition-all print:hidden">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
@@ -393,6 +419,15 @@ export default function Home() {
         </div>
 
         <div className="flex space-x-3 w-full sm:w-auto items-center justify-between sm:justify-end">
+
+          {/* AI Credits Display */}
+          <div className="hidden md:flex items-center gap-1.5 bg-amber-50 border border-amber-100 px-3 py-1.5 rounded-lg mr-2" title="Daily AI Credits">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-amber-500">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+            </svg>
+            <span className="text-sm font-bold text-amber-600">{credits}</span>
+          </div>
+
           <div className="flex space-x-3">
             <select
               value={subject}
@@ -414,6 +449,14 @@ export default function Home() {
           </div>
           
           <div className="flex items-center gap-3 ml-2 border-l pl-3 border-slate-200">
+             
+             {/* Print Chat Button */}
+             <button onClick={handlePrint} className="text-slate-500 hover:text-blue-500 transition-colors p-2 rounded-full hover:bg-blue-50 hidden sm:block" title="Download Notes">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+             </button>
+
              <div className="text-right hidden md:block">
                <p className="text-sm font-bold text-slate-700 leading-tight">{userName}</p>
                <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">{userRole}</p>
@@ -513,15 +556,26 @@ export default function Home() {
       </main>
 
       {/* Input Area (Sticky & Glassmorphic) */}
-      <footer className="backdrop-blur-xl bg-white/80 border-t border-slate-200/50 p-4 sm:p-6 w-full max-w-4xl mx-auto sticky bottom-0 z-20">
-        <form onSubmit={handleSubmit} className="flex relative items-center shadow-sm rounded-full bg-white">
+      <footer className="backdrop-blur-xl bg-white/80 border-t border-slate-200/50 p-4 sm:p-6 w-full max-w-4xl mx-auto sticky bottom-0 z-20 print:hidden">
+        <form onSubmit={handleSubmit} className="flex relative items-center shadow-sm rounded-full bg-white border border-slate-200 focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
+          <button
+            type="button"
+            onClick={startVoiceInput}
+            disabled={isLoading}
+            title="Voice Input"
+            className={`absolute left-2 p-2 rounded-full transition-all ${isRecording ? "text-red-500 animate-pulse" : "text-slate-400 hover:text-blue-500"}`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill={isRecording ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+            </svg>
+          </button>
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
-            placeholder="Ask a doubt from NCERT..."
-            className="w-full pl-6 pr-14 py-4 rounded-full border border-slate-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10 transition-all disabled:opacity-60 disabled:bg-slate-50 outline-none text-slate-700 font-medium placeholder:font-normal"
+            placeholder={isRecording ? "Listening..." : "Ask a doubt from NCERT..."}
+            className="w-full pl-12 pr-14 py-4 rounded-full bg-transparent disabled:opacity-60 disabled:bg-slate-50 outline-none text-slate-700 font-medium placeholder:font-normal"
           />
           <button
             type="submit"
