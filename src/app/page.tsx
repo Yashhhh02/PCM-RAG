@@ -52,6 +52,7 @@ export default function Home() {
   const [authError, setAuthError] = useState("");
   const [authMsg, setAuthMsg] = useState("");
   const [isCheckingRole, setIsCheckingRole] = useState(false);
+  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -104,6 +105,11 @@ export default function Home() {
   };
 
   useEffect(() => {
+    // Check if coming from a password reset email link
+    if (typeof window !== "undefined" && window.location.hash.includes("type=recovery")) {
+      setIsRecoveryMode(true);
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setIsAuthLoading(false);
@@ -111,8 +117,11 @@ export default function Home() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
+      if (event === "PASSWORD_RECOVERY") {
+        setIsRecoveryMode(true);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -184,7 +193,7 @@ export default function Home() {
     setAuthError("");
     
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin,
+      redirectTo: `${window.location.origin}/`,
     });
     
     if (error) {
@@ -192,6 +201,28 @@ export default function Home() {
       setAuthMsg("");
     } else {
       setAuthMsg("Password reset link sent to your email!");
+    }
+  };
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError("");
+    setAuthMsg("Updating password...");
+
+    const { error } = await supabase.auth.updateUser({
+      password: password
+    });
+
+    if (error) {
+      setAuthError(error.message);
+      setAuthMsg("");
+    } else {
+      setAuthMsg("Password updated successfully! You can now log in.");
+      setIsRecoveryMode(false);
+      setPassword("");
+      setIsLogin(true);
+      // Remove hash from URL
+      window.history.replaceState(null, "", window.location.pathname);
     }
   };
 
@@ -255,6 +286,32 @@ export default function Home() {
         <div className="animate-pulse flex flex-col items-center">
           <div className="w-12 h-12 bg-blue-400 rounded-full mb-4"></div>
           <p className="text-slate-500 font-medium">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isRecoveryMode) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 p-4">
+        <div className="bg-white/90 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl w-full max-w-md border border-slate-100 relative overflow-hidden">
+          <div className="relative z-10">
+            <h1 className="text-2xl font-bold text-slate-800 tracking-tight text-center mb-6">Reset Your Password</h1>
+            <p className="text-center text-slate-500 mb-6">Enter a new password for your account.</p>
+            <form onSubmit={handleUpdatePassword} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5">New Password</label>
+                <input type="password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all" placeholder="Enter new password" />
+              </div>
+              
+              {authError && <div className="text-red-500 text-sm font-medium bg-red-50 p-3 rounded-lg border border-red-100">{authError}</div>}
+              {authMsg && <div className="text-green-600 text-sm font-medium bg-green-50 p-3 rounded-lg border border-green-100">{authMsg}</div>}
+              
+              <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-all shadow-md">
+                Update Password
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     );
