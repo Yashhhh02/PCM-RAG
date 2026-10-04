@@ -106,8 +106,11 @@ export default function Home() {
 
   useEffect(() => {
     // Check if coming from a password reset email link
-    if (typeof window !== "undefined" && window.location.hash.includes("type=recovery")) {
-      setIsRecoveryMode(true);
+    if (typeof window !== "undefined") {
+      const url = window.location.href;
+      if (url.includes("type=recovery") || url.includes("recovery")) {
+        setIsRecoveryMode(true);
+      }
     }
 
     supabase.auth.getSession().then(({ data: { session } }) => {
