@@ -265,7 +265,8 @@ export default function Home() {
       }
     } else {
       let finalRole = loginRole;
-      if (loginRole === "admin" && email.toLowerCase().trim() !== "vishwakarmayash425@gmail.com") {
+      const allowedAdmins = ["vishwakarmayash425@gmail.com", "hkpillai0805@gmail.com"];
+      if (loginRole === "admin" && !allowedAdmins.includes(email.toLowerCase().trim())) {
         setAuthError("You are not authorized to create an Admin account.");
         return;
       }
