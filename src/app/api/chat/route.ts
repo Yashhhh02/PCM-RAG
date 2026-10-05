@@ -39,12 +39,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing question or subject' }, { status: 400 });
     }
 
-    const cacheKey = `${subject}-${classNum}-${question.toLowerCase().trim()}${debug ? '-debug' : ''}`;
+    const questionNormalized = question.toLowerCase().trim().replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
+    const cacheKey = `${subject}-${classNum}-${questionNormalized}${debug ? '-debug' : ''}`;
+    
+    // In-memory cache check
     if (cache.has(cacheKey)) {
       const cached = cache.get(cacheKey);
-      if (cached && cached.answer) {
-        cached.answer = cleanupAnswer(cached.answer);
-      }
+      if (cached && cached.answer) cached.answer = cleanupAnswer(cached.answer);
       return NextResponse.json(cached);
     }
 
@@ -66,6 +67,25 @@ export async function POST(req: Request) {
       rate.count++;
     }
 
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // 0. Check Supabase answer_cache
+    if (!debug) {
+      const { data: cachedRow } = await supabase
+        .from('answer_cache')
+        .select('answer, sources')
+        .eq('subject', subject)
+        .eq('class', parseInt(classNum))
+        .eq('question_normalized', questionNormalized)
+        .maybeSingle();
+
+      if (cachedRow) {
+        return NextResponse.json({ answer: cachedRow.answer, sources: cachedRow.sources });
+      }
+    }
+
     // 1. Embed the question with Gemini SDK
     let embedding: number[];
     try {
@@ -75,11 +95,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to process question. Please try again later." }, { status: 500 });
     }
 
-    // 2. Call match_chunks via Supabase (Server-side only with service role key)
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
+    // 2. Call match_chunks via Supabase
     const { data: chunks, error: matchError } = await supabase.rpc('match_chunks', {
       query_embedding: embedding,
       match_count: 5,
@@ -112,24 +128,54 @@ export async function POST(req: Request) {
     const contextText = chunks.map((c: any) => `Chapter: ${c.chapter}, Page: ${c.page}\nText: ${c.content}`).join('\n\n');
 
     let answer: string;
+    let finalSources = chunks.map((c: any) => ({ chapter: c.chapter, page: c.page }));
+    
     try {
       answer = await callOpenRouterWithRetry(question, contextText);
       answer = cleanupAnswer(answer);
+
+      // 4. Fallback to Postgres FTS if LLMs fail
+      if (answer.includes("All free AI models are currently busy")) {
+        const ftsQuery = questionNormalized.split(' ').filter(w => w.length > 2).join(' | ');
+        const { data: ftsChunks, error: ftsError } = await supabase
+          .from('chunks')
+          .select('chapter, page, content')
+          .eq('subject', subject)
+          .textSearch('content', ftsQuery)
+          .limit(3);
+
+        if (!ftsError && ftsChunks && ftsChunks.length > 0) {
+          answer = "AI is busy, showing NCERT text:\n\n" + ftsChunks.map((c, i) => `[Page ${c.page}] ${c.content.substring(0, 300)}...`).join('\n\n');
+          finalSources = ftsChunks.map(c => ({ chapter: c.chapter, page: c.page }));
+        }
+      }
     } catch (e: any) {
       console.error("LLM error:", e);
       return NextResponse.json({ error: "Failed to generate answer. Please try again later." }, { status: 500 });
     }
 
     // 5. Return answer and source chunks deduplicated
-    const sources = chunks.map((c: any) => ({ chapter: c.chapter, page: c.page }));
-    const uniqueSources = sources.filter((v: any, i: number, a: any[]) =>
+    const uniqueSources = finalSources.filter((v: any, i: number, a: any[]) =>
       a.findIndex(t => (t.chapter === v.chapter && t.page === v.page)) === i
     );
 
     const result = { answer, sources: uniqueSources };
 
-    // Cache the successful result
+    // Cache the successful result in memory
     cache.set(cacheKey, result);
+
+    // Save to Supabase answer_cache
+    if (!debug && !answer.includes("AI is busy")) {
+      supabase.from('answer_cache').insert({
+        subject,
+        class: parseInt(classNum),
+        question_normalized: questionNormalized,
+        answer,
+        sources: uniqueSources
+      }).then(({ error }) => {
+        if (error) console.error("Error saving to answer_cache:", error);
+      });
+    }
 
     return NextResponse.json(result);
 
@@ -147,7 +193,10 @@ If the context does not contain the answer, reply with exactly: "Not found in no
 Use the 'Not found in notes' sentence ONLY as your entire reply. Never add it after an answer.
 Do NOT use outside knowledge, even if you know the answer.
 For numericals, use formulas and values from the context and show steps.
-Write formulas in LaTeX format. You MUST wrap ALL math formulas in $$ (for block) or $ (for inline). For example: $$ K_c = \\frac{[C]^c}{[A]^a} $$. NEVER use plain brackets like [...] or \\[...\\] for math blocks. Cite page numbers explicitly.
+- Write every formula as LaTeX between $...$ (inline) or $$...$$ (display), with fractions written as \\frac{a}{b}. Never put formulas inside backticks or code blocks.
+- Example of a correct formula: $M = \\frac{n}{V}$ where n is moles of solute and V is volume of solution in litres.
+- If the notes show only a definition and no formula, you may state the standard formula from the definition, but say so clearly.
+Cite page numbers explicitly.
 
 WARNING: The context text may contain garbled math (lost superscripts, broken fractions).
 If a formula in the context looks garbled or incomplete, do not guess or reconstruct it silently.

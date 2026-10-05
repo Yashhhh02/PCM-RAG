@@ -68,6 +68,7 @@ export default function Home() {
   const [savedDoubts, setSavedDoubts] = useState<Message[]>([]);
   const [dailyChallengeCompleted, setDailyChallengeCompleted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [popularFaqs, setPopularFaqs] = useState<any[]>([]);
 
   // Quiz States
   const [showTestModal, setShowTestModal] = useState(false);
@@ -202,6 +203,20 @@ export default function Home() {
     }
     return () => clearInterval(timer);
   }, [isTestMode, quizQuestions, quizAnalysis]);
+
+  useEffect(() => {
+    async function fetchFaqs() {
+      if (!subject || !classNum) return;
+      const { data } = await supabase
+        .from('faq')
+        .select('*')
+        .eq('subject', subject)
+        .eq('class', parseInt(classNum))
+        .limit(5);
+      if (data) setPopularFaqs(data);
+    }
+    fetchFaqs();
+  }, [subject, classNum]);
 
   useEffect(() => {
     // Check if coming from a password reset email link
@@ -710,20 +725,43 @@ export default function Home() {
               Select your subject and class above, then ask me any question from the NCERT syllabus.
             </p>
 
-            <div className="flex flex-col w-full max-w-md space-y-3">
-              {exampleQuestions.map((q, i) => (
-                <button
-                  key={i}
-                  onClick={() => setInput(q)}
-                  className="bg-white border border-slate-200 hover:border-blue-400 hover:shadow-md text-left px-5 py-4 rounded-2xl text-slate-700 transition-all duration-200 group flex justify-between items-center"
-                >
-                  <span className="font-medium group-hover:text-blue-600 transition-colors">{q}</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </button>
-              ))}
-            </div>
+            {popularFaqs.length > 0 ? (
+              <div className="w-full max-w-md">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 text-center">Popular Questions</p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {popularFaqs.map((faq, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        setMessages(prev => [
+                          ...prev, 
+                          { role: 'user', content: faq.question },
+                          { role: 'assistant', content: faq.answer, sources: faq.sources }
+                        ]);
+                      }}
+                      className="bg-white border border-blue-200 hover:border-blue-400 text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm hover:shadow text-left"
+                    >
+                      {faq.question.length > 35 ? faq.question.substring(0, 35) + '...' : faq.question}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col w-full max-w-md space-y-3">
+                {exampleQuestions.map((q, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setInput(q)}
+                    className="bg-white border border-slate-200 hover:border-blue-400 hover:shadow-md text-left px-5 py-4 rounded-2xl text-slate-700 transition-all duration-200 group flex justify-between items-center"
+                  >
+                    <span className="font-medium group-hover:text-blue-600 transition-colors">{q}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
