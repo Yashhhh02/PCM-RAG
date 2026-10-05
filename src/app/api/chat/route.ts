@@ -136,7 +136,7 @@ export async function POST(req: Request) {
 
       // 4. Fallback to Postgres FTS if LLMs fail
       if (answer.includes("All free AI models are currently busy")) {
-        const ftsQuery = questionNormalized.split(' ').filter(w => w.length > 2).join(' | ');
+        const ftsQuery = questionNormalized.split(' ').filter((w: string) => w.length > 2).join(' | ');
         const { data: ftsChunks, error: ftsError } = await supabase
           .from('chunks')
           .select('chapter, page, content')
