@@ -706,7 +706,14 @@ export default function Home() {
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full animate-fade-in-up mt-10 sm:mt-0">
             {!dailyChallengeCompleted && (
-              <div className="w-full max-w-md bg-gradient-to-r from-orange-400 to-rose-400 p-5 rounded-3xl text-white shadow-lg mb-8 relative overflow-hidden group cursor-pointer" onClick={() => { setInput("What is the Daily Challenge for today?"); setDailyChallengeCompleted(true); }}>
+              <div className="w-full max-w-md bg-gradient-to-r from-orange-400 to-rose-400 p-5 rounded-3xl text-white shadow-lg mb-8 relative overflow-hidden group cursor-pointer" onClick={() => { 
+                setMessages(prev => [
+                  ...prev,
+                  { role: 'user', content: "What is the Daily Challenge for today?" },
+                  { role: 'assistant', content: "🔥 **Today's Daily Challenge:**\n\nA particle moves along a straight line such that its displacement $s$ at any time $t$ is given by $s = t^3 - 6t^2 + 3t + 4$ metres. What is the velocity when the acceleration is zero?\n\n*Solve this and reply with your answer!*", sources: [] }
+                ]);
+                setDailyChallengeCompleted(true); 
+              }}>
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-2xl -mr-10 -mt-10"></div>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-2xl">🎯</span>
