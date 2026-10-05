@@ -147,7 +147,7 @@ If the context does not contain the answer, reply with exactly: "Not found in no
 Use the 'Not found in notes' sentence ONLY as your entire reply. Never add it after an answer.
 Do NOT use outside knowledge, even if you know the answer.
 For numericals, use formulas and values from the context and show steps.
-Write formulas in LaTeX format. You MUST wrap ALL math formulas in $$ (for block) or $ (for inline). For example: $$ K_c = \frac{[C]^c}{[A]^a} $$. NEVER use plain brackets like [...] or \[...\] for math blocks. Cite page numbers explicitly.
+Write formulas in LaTeX format. You MUST wrap ALL math formulas in $$ (for block) or $ (for inline). For example: $$ K_c = \\frac{[C]^c}{[A]^a} $$. NEVER use plain brackets like [...] or \\[...\\] for math blocks. Cite page numbers explicitly.
 
 WARNING: The context text may contain garbled math (lost superscripts, broken fractions).
 If a formula in the context looks garbled or incomplete, do not guess or reconstruct it silently.

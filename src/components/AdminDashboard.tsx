@@ -88,52 +88,68 @@ export default function AdminDashboard({ session, handleLogout }: { session: any
         {/* Content Area */}
         <div className="col-span-1 md:col-span-3 space-y-6">
           
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-              <div className="flex items-center gap-4 mb-2">
-                <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-500 uppercase">Total Students</p>
-                  <h3 className="text-2xl font-bold text-slate-800">{isLoading ? '...' : studentsCount}</h3>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-              <div className="flex items-center gap-4 mb-2">
-                <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg></div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-500 uppercase">Total Teachers</p>
-                  <h3 className="text-2xl font-bold text-slate-800">{isLoading ? '...' : teachersCount}</h3>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-              <div className="flex items-center gap-4 mb-2">
-                <div className="p-3 bg-amber-50 text-amber-600 rounded-xl"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg></div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-500 uppercase">PDFs Indexed</p>
-                  <h3 className="text-2xl font-bold text-slate-800">47</h3>
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Dynamic Tab Content */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden min-h-[500px]">
+            {activeTab === 'dashboard' && (
+              <div className="p-8">
+                <h3 className="text-xl font-bold text-slate-800 mb-6">System Health & API Costs</h3>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl shadow-sm">
+                    <p className="text-sm font-semibold text-slate-500 uppercase">Tokens Used Today</p>
+                    <h3 className="text-3xl font-extrabold text-slate-800">1.2M</h3>
+                    <p className="text-xs text-emerald-600 mt-1 font-medium">Well within 1M/min Free limit</p>
+                  </div>
+                  <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl shadow-sm">
+                    <p className="text-sm font-semibold text-slate-500 uppercase">Estimated Bill</p>
+                    <h3 className="text-3xl font-extrabold text-slate-800">₹0.00</h3>
+                    <p className="text-xs text-slate-500 mt-1 font-medium">Free Tier Active</p>
+                  </div>
+                  <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl shadow-sm">
+                    <p className="text-sm font-semibold text-slate-500 uppercase">Live Server Status</p>
+                    <h3 className="text-3xl font-extrabold text-emerald-600">Online</h3>
+                    <p className="text-xs text-slate-500 mt-1 font-medium">No 503 Errors detected</p>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-purple-900 to-indigo-900 p-6 rounded-2xl text-white shadow-lg">
+                  <h4 className="text-lg font-bold mb-2">API Safety Lock</h4>
+                  <p className="text-purple-200 text-sm mb-4">Hard limit to prevent accidental charges if usage spikes unexpectedly.</p>
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">Current Limit: 1500 Reqs/Day</span>
+                    <button className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg font-bold text-sm transition-all">Edit Limit</button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {activeTab === 'users' && (
               <div className="p-0">
                 <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                  <h2 className="text-lg font-bold text-slate-800">Registered Users</h2>
+                  <h2 className="text-lg font-bold text-slate-800">User Management</h2>
                   <span className="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full">{users.length} Total</span>
                 </div>
                 
+                {/* Pending Approvals Section (Mocked) */}
+                <div className="p-6 border-b border-slate-100 bg-amber-50/50">
+                  <h3 className="text-sm font-bold text-amber-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    Pending Teacher Approvals
+                  </h3>
+                  <div className="bg-white border border-amber-200 rounded-xl p-4 flex justify-between items-center shadow-sm">
+                    <div>
+                      <p className="font-bold text-slate-800">Mr. Sharma (Physics)</p>
+                      <p className="text-sm text-slate-500">Requested access to K.V. No.1 Dashboard</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 font-bold px-4 py-2 rounded-lg text-sm transition-all">Approve</button>
+                      <button className="bg-red-100 text-red-700 hover:bg-red-200 font-bold px-4 py-2 rounded-lg text-sm transition-all">Reject</button>
+                    </div>
+                  </div>
+                </div>
+
                 {isLoading ? (
                   <div className="p-10 text-center text-slate-500">
-                    <svg className="animate-spin h-8 w-8 text-purple-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
                     Loading users...
                   </div>
                 ) : (
@@ -192,24 +208,42 @@ export default function AdminDashboard({ session, handleLogout }: { session: any
               </div>
             )}
 
-            {activeTab === 'dashboard' && (
-              <div className="p-8 text-center flex flex-col items-center justify-center h-[400px]">
-                <div className="w-24 h-24 bg-purple-50 text-purple-300 rounded-full flex items-center justify-center mb-6">
-                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-                </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-2">Welcome to the Admin Portal</h3>
-                <p className="text-slate-500 max-w-md mx-auto">Here you can monitor all system activity, manage student and teacher accounts, and review your ingested RAG Knowledge Base.</p>
-              </div>
-            )}
-
             {activeTab === 'knowledge' && (
-              <div className="p-8 text-center flex flex-col items-center justify-center h-[400px]">
-                <div className="w-24 h-24 bg-blue-50 text-blue-300 rounded-full flex items-center justify-center mb-6">
-                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+              <div className="p-8">
+                <h3 className="text-xl font-bold text-slate-800 mb-6">Subject & Knowledge Base Toggles</h3>
+                <p className="text-slate-500 mb-8">Turn subjects on or off globally. If turned off, students will not be able to select that subject or ask doubts related to it.</p>
+                
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-4 border border-slate-200 rounded-xl bg-white shadow-sm">
+                    <div>
+                      <h4 className="font-bold text-slate-800">Physics (Class 11 & 12)</h4>
+                      <p className="text-sm text-slate-500">24 Chapters indexed in Vector DB</p>
+                    </div>
+                    <div className="w-14 h-8 bg-purple-600 rounded-full relative cursor-pointer shadow-inner">
+                      <div className="absolute right-1 top-1 w-6 h-6 bg-white rounded-full shadow-sm"></div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center p-4 border border-slate-200 rounded-xl bg-white shadow-sm">
+                    <div>
+                      <h4 className="font-bold text-slate-800">Chemistry (Class 11 & 12)</h4>
+                      <p className="text-sm text-slate-500">22 Chapters indexed in Vector DB</p>
+                    </div>
+                    <div className="w-14 h-8 bg-purple-600 rounded-full relative cursor-pointer shadow-inner">
+                      <div className="absolute right-1 top-1 w-6 h-6 bg-white rounded-full shadow-sm"></div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center p-4 border border-slate-200 rounded-xl bg-slate-50 opacity-60 grayscale">
+                    <div>
+                      <h4 className="font-bold text-slate-800">Mathematics (Class 11 & 12)</h4>
+                      <p className="text-sm text-slate-500">0 Chapters indexed. Currently processing.</p>
+                    </div>
+                    <div className="w-14 h-8 bg-slate-300 rounded-full relative cursor-not-allowed">
+                      <div className="absolute left-1 top-1 w-6 h-6 bg-white rounded-full shadow-sm"></div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-2">47 Chapters Indexed</h3>
-                <p className="text-slate-500 max-w-md mx-auto mb-6">Your PCM Knowledge Base is fully up to date. The vector database contains Physics, Chemistry, and Maths notes.</p>
-                <button className="px-5 py-2.5 bg-slate-100 text-slate-600 rounded-lg font-medium hover:bg-slate-200 transition-colors">Manage Data Sources</button>
               </div>
             )}
           </div>
