@@ -765,32 +765,32 @@ export default function Home() {
                             <span className="font-bold text-slate-200">Newton's Laws of Motion</span>
                             <span className="text-emerald-500 font-bold bg-emerald-950/40 px-2 py-0.5 rounded text-xs">Strong (90%)</span>
                          </div>
-                         <div className="w-full bg-slate-100 rounded-full h-3"><div className="bg-emerald-950/400 h-3 rounded-full" style={{width: '90%'}}></div></div>
+                         <div className="w-full bg-slate-800 rounded-full h-3"><div className="bg-emerald-500 h-3 rounded-full" style={{width: '90%'}}></div></div>
                       </div>
                       <div>
                          <div className="flex justify-between text-sm mb-2">
                             <span className="font-bold text-slate-200">Rotational Dynamics</span>
                             <span className="text-amber-500 font-bold bg-amber-950/40 px-2 py-0.5 rounded text-xs">Review (45%)</span>
                          </div>
-                         <div className="w-full bg-slate-100 rounded-full h-3"><div className="bg-amber-950/400 h-3 rounded-full" style={{width: '45%'}}></div></div>
+                         <div className="w-full bg-slate-800 rounded-full h-3"><div className="bg-amber-500 h-3 rounded-full" style={{width: '45%'}}></div></div>
                       </div>
                       <div>
                          <div className="flex justify-between text-sm mb-2">
                             <span className="font-bold text-slate-200">Thermodynamics</span>
                             <span className="text-red-500 font-bold bg-red-950/40 px-2 py-0.5 rounded text-xs">Weak (20%)</span>
                          </div>
-                         <div className="w-full bg-slate-100 rounded-full h-3"><div className="bg-red-950/400 h-3 rounded-full" style={{width: '20%'}}></div></div>
+                         <div className="w-full bg-slate-800 rounded-full h-3"><div className="bg-red-500 h-3 rounded-full" style={{width: '20%'}}></div></div>
                       </div>
                    </div>
                 </div>
 
                 <div className="flex flex-col gap-6">
-                   <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-3xl shadow-sm border border-indigo-100 flex-1">
+                   <div className="bg-[#161616] p-8 rounded-3xl shadow-sm border border-slate-800 flex-1">
                       <h3 className="font-bold text-xl text-cyan-100 mb-4 flex items-center gap-2">
                         <span className="text-2xl">🤖</span> AI Recommendation
                       </h3>
                       <p className="text-cyan-200 font-medium leading-relaxed mb-6">
-                        You are taking <span className="font-black bg-indigo-200 px-1 rounded">3 minutes per question</span> on Rotational Dynamics. Let's practice some standard problems to improve your speed and accuracy.
+                        You are taking <span className="font-black bg-slate-800 text-cyan-300 px-1 rounded">3 minutes per question</span> on Rotational Dynamics. Let's practice some standard problems to improve your speed and accuracy.
                       </p>
                       <button onClick={() => setStudentTab('chat')} className="w-full bg-cyan-500 text-black hover:bg-cyan-400 text-black font-bold py-3.5 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
                         Start Directed Practice
@@ -912,7 +912,7 @@ export default function Home() {
               {msg.role === 'user' ? (
                 <p className="whitespace-pre-wrap font-medium">{msg.content}</p>
               ) : (
-                <div className="prose prose-sm sm:prose-base prose-slate max-w-none prose-p:leading-relaxed prose-headings:text-white prose-a:text-cyan-400">
+                <div className="prose prose-sm sm:prose-base prose-slate prose-invert max-w-none prose-p:leading-relaxed prose-headings:text-white prose-a:text-cyan-400">
                   <ReactMarkdown
                     remarkPlugins={[remarkMath]}
                     rehypePlugins={[rehypeKatex]}
@@ -922,7 +922,7 @@ export default function Home() {
                   <div className="mt-4 pt-3 border-t border-slate-800 flex justify-end">
                     <button 
                       onClick={() => setSavedDoubts(prev => [...prev, msg])}
-                      className="text-xs font-bold text-amber-500 bg-amber-950/40 px-3 py-1.5 rounded-lg hover:bg-amber-100 transition-colors flex items-center gap-1.5"
+                      className="text-xs font-bold text-amber-500 bg-amber-950/40 px-3 py-1.5 rounded-lg hover:bg-amber-900/60 transition-colors flex items-center gap-1.5"
                     >
                       <span>⭐</span> Save Doubt
                     </button>
@@ -967,7 +967,7 @@ export default function Home() {
             <div className="space-y-6">
               {savedDoubts.map((doubt, i) => (
                 <div key={i} className="bg-[#111111] p-6 rounded-2xl shadow-sm border border-slate-800">
-                   <div className="prose prose-sm sm:prose-base prose-slate max-w-none prose-p:leading-relaxed">
+                   <div className="prose prose-sm sm:prose-base prose-slate prose-invert max-w-none prose-p:leading-relaxed">
                      <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                        {normalizeMath(doubt.content)}
                      </ReactMarkdown>
@@ -1013,21 +1013,21 @@ export default function Home() {
                       <span className="font-semibold text-slate-200">Newton's Laws of Motion</span>
                       <span className="text-emerald-500 font-bold">Strong (90%)</span>
                    </div>
-                   <div className="w-full bg-slate-100 rounded-full h-2.5"><div className="bg-emerald-950/400 h-2.5 rounded-full" style={{width: '90%'}}></div></div>
+                   <div className="w-full bg-slate-800 rounded-full h-2.5"><div className="bg-emerald-500 h-2.5 rounded-full" style={{width: '90%'}}></div></div>
                 </div>
                 <div>
                    <div className="flex justify-between text-sm mb-1">
                       <span className="font-semibold text-slate-200">Rotational Dynamics</span>
                       <span className="text-amber-500 font-bold">Needs Revision (45%)</span>
                    </div>
-                   <div className="w-full bg-slate-100 rounded-full h-2.5"><div className="bg-amber-950/400 h-2.5 rounded-full" style={{width: '45%'}}></div></div>
+                   <div className="w-full bg-slate-800 rounded-full h-2.5"><div className="bg-amber-500 h-2.5 rounded-full" style={{width: '45%'}}></div></div>
                 </div>
                 <div>
                    <div className="flex justify-between text-sm mb-1">
                       <span className="font-semibold text-slate-200">Thermodynamics</span>
                       <span className="text-red-500 font-bold">Weak (20%)</span>
                    </div>
-                   <div className="w-full bg-slate-100 rounded-full h-2.5"><div className="bg-red-950/400 h-2.5 rounded-full" style={{width: '20%'}}></div></div>
+                   <div className="w-full bg-slate-800 rounded-full h-2.5"><div className="bg-red-500 h-2.5 rounded-full" style={{width: '20%'}}></div></div>
                 </div>
              </div>
              <div className="mt-6 p-4 bg-cyan-950/40 rounded-xl border border-blue-100">

@@ -105,7 +105,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
                         <span className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase ${c.subject.toLowerCase() === 'math' ? 'bg-purple-900/20 text-purple-400' : c.subject.toLowerCase() === 'physics' ? 'bg-cyan-900/20 text-cyan-400' : 'bg-amber-900/20 text-amber-400'}`}>Class {c.class}</span>
                         <span className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase ${c.subject.toLowerCase() === 'math' ? 'bg-purple-900/20 text-purple-400' : c.subject.toLowerCase() === 'physics' ? 'bg-cyan-900/20 text-cyan-400' : 'bg-amber-900/20 text-amber-400'}`}>{c.subject}</span>
                       </div>
-                      <span className="text-xs font-bold text-slate-500 flex items-center gap-1">
+                      <span className="text-xs font-bold text-slate-400 flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
                           <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z" clipRule="evenodd" />
                         </svg>
@@ -121,13 +121,13 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
                       </div>
                       <div>
                         <h3 className="font-extrabold text-slate-100 capitalize leading-tight mb-1">{c.chapter.replace(/-/g, ' ')}</h3>
-                        <p className="text-xs text-slate-500 leading-snug line-clamp-2">Study materials, NCERT notes, and vector representations for {c.chapter.replace(/-/g, ' ')}.</p>
+                        <p className="text-xs text-slate-400 leading-snug line-clamp-2">Study materials, NCERT notes, and vector representations for {c.chapter.replace(/-/g, ' ')}.</p>
                       </div>
                     </div>
                   </div>
                   
                   <div className={`mt-6 pt-4 border-t flex justify-between items-center ${c.subject.toLowerCase() === 'math' ? 'border-purple-100' : c.subject.toLowerCase() === 'physics' ? 'border-blue-100' : 'border-amber-100'}`}>
-                    <span className="text-xs font-semibold text-slate-500">Explore Chapter Notes</span>
+                    <span className="text-xs font-semibold text-slate-400">Explore Chapter Notes</span>
                     <span className={`text-xs font-bold flex items-center gap-1 ${c.subject.toLowerCase() === 'math' ? 'text-purple-400' : c.subject.toLowerCase() === 'physics' ? 'text-cyan-400' : 'text-amber-400'}`}>
                       Open Folder
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -140,7 +140,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
             </div>
 
             {filteredCurriculum.length === 0 && (
-              <div className="py-20 flex flex-col items-center justify-center text-slate-500">
+              <div className="py-20 flex flex-col items-center justify-center text-slate-400">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-16 h-16 mb-4 text-slate-200">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                 </svg>
@@ -153,7 +153,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
 
         {viewState === 'folder' && selectedFolder && (
           <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-            <button onClick={() => setViewState('grid')} className="text-sm font-bold text-slate-500 flex items-center gap-2 hover:text-slate-100 transition-colors mb-6">
+            <button onClick={() => setViewState('grid')} className="text-sm font-bold text-slate-400 flex items-center gap-2 hover:text-slate-100 transition-colors mb-6">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                 <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
               </svg>
@@ -167,7 +167,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
                   <div className="flex gap-2 items-center mb-3">
                     <span className="bg-cyan-900/20 text-cyan-400 font-bold px-3 py-1 rounded-full text-xs">Class {selectedFolder.class}th</span>
                     <span className="bg-cyan-900/20 text-cyan-400 font-bold px-3 py-1 rounded-full text-xs capitalize">{selectedFolder.subject}</span>
-                    <span className="text-xs text-slate-500 font-medium ml-2">• Created recently</span>
+                    <span className="text-xs text-slate-400 font-medium ml-2">• Created recently</span>
                   </div>
                   <h2 className="text-3xl font-black text-slate-100 flex items-center gap-3 capitalize mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-cyan-500">
@@ -175,7 +175,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
                     </svg>
                     {selectedFolder.chapter.replace(/-/g, ' ')}
                   </h2>
-                  <p className="text-sm text-slate-500">Curriculum study notes, core principles, and testable objectives tailored for Class {selectedFolder.class}.</p>
+                  <p className="text-sm text-slate-400">Curriculum study notes, core principles, and testable objectives tailored for Class {selectedFolder.class}.</p>
                 </div>
                 <div className="bg-slate-900 text-slate-300 font-bold px-4 py-2 rounded-xl text-sm flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-cyan-500">
@@ -187,20 +187,20 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
             </div>
 
             <div className="flex justify-between items-end mb-6">
-              <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-cyan-500">
                   <path d="M10.75 16.82A7.462 7.462 0 0115 15.5c.71 0 1.396.098 2.046.282A.75.75 0 0018 15.06v-11a.75.75 0 00-.546-.721A9.006 9.006 0 0015 3a8.963 8.963 0 00-4.25 1.065V16.82zM9.25 4.065A8.963 8.963 0 005 3c-1.279 0-2.52.264-3.684.757A.75.75 0 001 4.5v11a.75.75 0 00.954.722A7.462 7.462 0 015 15.5c.71 0 1.396.098 2.046.282V4.065z" />
                 </svg>
                 Uploaded Study Documents & Chapter Guides (1)
               </h3>
-              <span className="text-xs text-slate-500 capitalize">Class {selectedFolder.class} {selectedFolder.subject}</span>
+              <span className="text-xs text-slate-400 capitalize">Class {selectedFolder.class} {selectedFolder.subject}</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="border border-slate-800 bg-[#111111] rounded-2xl p-5 shadow-none hover:shadow-none transition-shadow flex flex-col">
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-[10px] font-bold bg-cyan-900/20 text-cyan-400 px-2 py-1 rounded-md capitalize">{selectedFolder.subject} • Class {selectedFolder.class}</span>
-                  <span className="text-xs font-semibold text-slate-500 flex items-center gap-1">
+                  <span className="text-xs font-semibold text-slate-400 flex items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" />
                     </svg>
@@ -209,21 +209,21 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
                 </div>
                 
                 <h4 className="text-lg font-bold text-slate-100 leading-tight mb-2 capitalize">{selectedFolder.chapter.replace(/-/g, ' ')} Master Notes</h4>
-                <p className="text-xs text-slate-500 flex items-center gap-1 mb-4">
+                <p className="text-xs text-slate-400 flex items-center gap-1 mb-4">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
                     <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z" clipRule="evenodd" />
                   </svg>
                   {selectedFolder.chapter.replace(/-/g, '_')}_Master_Notes.pdf • {selectedFolder.chunkCount} parts
                 </p>
                 
-                <p className="text-xs text-slate-500 leading-relaxed mb-4 flex-1 line-clamp-3">
+                <p className="text-xs text-slate-400 leading-relaxed mb-4 flex-1 line-clamp-3">
                   This document contains all the processed chunks from the database for the {selectedFolder.chapter.replace(/-/g, ' ')} chapter. It serves as a core foundation for classical mechanics and advanced concepts.
                 </p>
                 
                 <div className="space-y-2 mb-6">
-                  <div className="text-[10px] bg-slate-900 px-2 py-1 rounded text-slate-500 font-semibold">• Core Principles extracted</div>
-                  <div className="text-[10px] bg-slate-900 px-2 py-1 rounded text-slate-500 font-semibold">• Vector DB indexed content</div>
-                  <div className="text-[10px] bg-slate-900 px-2 py-1 rounded text-slate-500 font-semibold text-cyan-400 font-bold">+ {selectedFolder.chunkCount} chunks</div>
+                  <div className="text-[10px] bg-slate-900 px-2 py-1 rounded text-slate-400 font-semibold">• Core Principles extracted</div>
+                  <div className="text-[10px] bg-slate-900 px-2 py-1 rounded text-slate-400 font-semibold">• Vector DB indexed content</div>
+                  <div className="text-[10px] bg-slate-900 px-2 py-1 rounded text-slate-400 font-semibold text-cyan-400 font-bold">+ {selectedFolder.chunkCount} chunks</div>
                 </div>
                 
                 <div className="border-t border-slate-800 pt-4 flex justify-between items-center mt-auto">
@@ -247,7 +247,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
 
         {viewState === 'document' && selectedFolder && (
           <div className="animate-in fade-in zoom-in-95 duration-300">
-            <button onClick={() => setViewState('folder')} className="text-sm font-bold text-slate-500 flex items-center gap-2 hover:text-slate-100 transition-colors mb-6">
+            <button onClick={() => setViewState('folder')} className="text-sm font-bold text-slate-400 flex items-center gap-2 hover:text-slate-100 transition-colors mb-6">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                 <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
               </svg>
@@ -275,7 +275,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
                 {selectedFolder.chapter.replace(/-/g, ' ')} Master Notes
               </h1>
               
-              <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-500 mb-8 pb-8 border-b border-slate-800">
+              <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-400 mb-8 pb-8 border-b border-slate-800">
                 <span className="flex items-center gap-1">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z" clipRule="evenodd" />
@@ -305,19 +305,19 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
 
               {/* Tabs */}
               <div className="flex gap-6 border-b border-slate-800 mb-6 overflow-x-auto">
-                <button onClick={() => setActiveDocTab('summary')} className={`pb-3 text-sm font-bold flex items-center gap-2 whitespace-nowrap transition-colors ${activeDocTab === 'summary' ? 'text-cyan-500 border-b-2 border-cyan-500' : 'text-slate-500 hover:text-slate-300'}`}>
+                <button onClick={() => setActiveDocTab('summary')} className={`pb-3 text-sm font-bold flex items-center gap-2 whitespace-nowrap transition-colors ${activeDocTab === 'summary' ? 'text-cyan-500 border-b-2 border-cyan-500' : 'text-slate-400 hover:text-slate-300'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                   </svg>
                   Chapter & Syllabus Summary
                 </button>
-                <button onClick={() => setActiveDocTab('notes')} className={`pb-3 text-sm font-bold flex items-center gap-2 whitespace-nowrap transition-colors ${activeDocTab === 'notes' ? 'text-cyan-500 border-b-2 border-cyan-500' : 'text-slate-500 hover:text-slate-300'}`}>
+                <button onClick={() => setActiveDocTab('notes')} className={`pb-3 text-sm font-bold flex items-center gap-2 whitespace-nowrap transition-colors ${activeDocTab === 'notes' ? 'text-cyan-500 border-b-2 border-cyan-500' : 'text-slate-400 hover:text-slate-300'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z" clipRule="evenodd" />
                   </svg>
                   Core Principles & Notes ({selectedFolder.chunkCount})
                 </button>
-                <button onClick={() => setActiveDocTab('formulas')} className={`pb-3 text-sm font-bold flex items-center gap-2 whitespace-nowrap transition-colors ${activeDocTab === 'formulas' ? 'text-cyan-500 border-b-2 border-cyan-500' : 'text-slate-500 hover:text-slate-300'}`}>
+                <button onClick={() => setActiveDocTab('formulas')} className={`pb-3 text-sm font-bold flex items-center gap-2 whitespace-nowrap transition-colors ${activeDocTab === 'formulas' ? 'text-cyan-500 border-b-2 border-cyan-500' : 'text-slate-400 hover:text-slate-300'}`}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v2.5A2.25 2.25 0 004.25 9h2.5A2.25 2.25 0 009 6.75v-2.5A2.25 2.25 0 006.75 2h-2.5zm0 9A2.25 2.25 0 002 13.25v2.5A2.25 2.25 0 004.25 18h2.5A2.25 2.25 0 009 15.75v-2.5A2.25 2.25 0 006.75 11h-2.5zm9-9A2.25 2.25 0 0011 4.25v2.5A2.25 2.25 0 0013.25 9h2.5A2.25 2.25 0 0018 6.75v-2.5A2.25 2.25 0 0015.75 2h-2.5zm0 9A2.25 2.25 0 0011 13.25v2.5A2.25 2.25 0 0013.25 18h2.5A2.25 2.25 0 0018 15.75v-2.5A2.25 2.25 0 0015.75 11h-2.5z" clipRule="evenodd" />
                   </svg>
@@ -330,7 +330,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
                 {activeDocTab === 'summary' && (
                   <div className="space-y-6 animate-in fade-in">
                     <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                      <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Academic Syllabus Context & JEE Weightage</h3>
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Academic Syllabus Context & JEE Weightage</h3>
                       <p className="text-sm text-slate-300 leading-relaxed mb-4">
                         This section provides essential fundamental references and notes for Senior Secondary {selectedFolder.subject}. It covers core principles of <span className="capitalize font-semibold">{selectedFolder.chapter.replace(/-/g, ' ')}</span>, serving as a critical foundation for advanced topics.
                       </p>
@@ -351,24 +351,24 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
                 {activeDocTab === 'formulas' && (
                   <div className="py-10 text-center animate-in fade-in">
                     <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-slate-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-slate-400">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
                       </svg>
                     </div>
                     <h3 className="text-lg font-bold text-slate-100">Formula Extraction Pending</h3>
-                    <p className="text-sm text-slate-500 mt-2">The AI is currently processing the chunks to extract specific mathematical formulas.</p>
+                    <p className="text-sm text-slate-400 mt-2">The AI is currently processing the chunks to extract specific mathematical formulas.</p>
                   </div>
                 )}
 
                 {activeDocTab === 'notes' && (
                   <div className="py-10 text-center animate-in fade-in">
                     <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-slate-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-slate-400">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                       </svg>
                     </div>
                     <h3 className="text-lg font-bold text-slate-100">Notes Extraction Pending</h3>
-                    <p className="text-sm text-slate-500 mt-2">The AI is currently processing the chunks to generate structured study notes.</p>
+                    <p className="text-sm text-slate-400 mt-2">The AI is currently processing the chunks to generate structured study notes.</p>
                   </div>
                 )}
               </div>
