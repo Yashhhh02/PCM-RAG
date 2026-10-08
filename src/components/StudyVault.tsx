@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export default function StudyVault() {
+export default function StudyVault({ isStudentView }: { isStudentView?: boolean }) {
   const [curriculum, setCurriculum] = useState<any[]>([]);
   const [vaultGrade, setVaultGrade] = useState('11');
   const [vaultSubject, setVaultSubject] = useState('All');
