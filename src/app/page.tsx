@@ -415,11 +415,11 @@ export default function Home() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 p-4">
         <div className="bg-white/90 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl w-full max-w-md border border-slate-100 relative overflow-hidden">
           <div className="relative z-10">
-            <h1 className="text-2xl font-bold text-slate-800 tracking-tight text-center mb-6">Reset Your Password</h1>
+            <h1 className="text-2xl font-bold text-slate-200 tracking-tight text-center mb-6">Reset Your Password</h1>
             <p className="text-center text-slate-500 mb-6">Enter a new password for your account.</p>
             <form onSubmit={handleUpdatePassword} className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5">New Password</label>
+                <label className="block text-sm font-semibold text-slate-300 mb-1.5">New Password</label>
                 <input type="password" required value={password} onChange={e => setPassword(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all" placeholder="Enter new password" />
               </div>
               
@@ -452,7 +452,7 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
                 </svg>
               </div>
-              <h1 className="text-2xl font-bold text-slate-800 tracking-tight">PCM Assistant</h1>
+              <h1 className="text-2xl font-bold text-slate-200 tracking-tight">PCM Assistant</h1>
               <p className="text-slate-500 font-medium mt-1">Welcome Back</p>
             </div>
 
@@ -465,7 +465,7 @@ export default function Home() {
                   className={`flex-1 text-sm font-semibold py-2 rounded-lg transition-all capitalize ${
                     loginRole === r 
                       ? 'bg-white text-blue-600 shadow-sm' 
-                      : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                      : 'text-slate-500 hover:text-slate-300 hover:bg-slate-200/50'
                   }`}
                 >
                   {r}
@@ -477,18 +477,18 @@ export default function Home() {
               {!isLogin && (
                 <div className="space-y-4 animate-fade-in-up">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full Name</label>
+                    <label className="block text-sm font-semibold text-slate-300 mb-1.5">Full Name</label>
                     <input type="text" required value={name} onChange={e => setName(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all placeholder:text-slate-400" placeholder="Enter your full name" />
                   </div>
                   
                   {loginRole === "student" && (
                     <>
                       <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">School / College Name</label>
+                        <label className="block text-sm font-semibold text-slate-300 mb-1.5">School / College Name</label>
                         <input type="text" required value={schoolName} onChange={e => setSchoolName(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all placeholder:text-slate-400" placeholder="e.g. KV No. 1" />
                       </div>
                       <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1.5">Class / Standard</label>
+                        <label className="block text-sm font-semibold text-slate-300 mb-1.5">Class / Standard</label>
                         <select value={studentClass} onChange={e => setStudentClass(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all">
                           <option value="Class 11">Class 11</option>
                           <option value="Class 12">Class 12</option>
@@ -500,7 +500,7 @@ export default function Home() {
 
                   {loginRole === "teacher" && (
                     <div>
-                      <label className="block text-sm font-semibold text-slate-700 mb-1.5">Teacher Access Code</label>
+                      <label className="block text-sm font-semibold text-slate-300 mb-1.5">Teacher Access Code</label>
                       <input type="text" required value={accessCode} onChange={e => setAccessCode(e.target.value)} className="w-full px-4 py-2.5 border border-amber-300 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none text-slate-900 bg-amber-50/50 backdrop-blur-sm transition-all placeholder:text-slate-400" placeholder="Ask your admin for the code" />
                     </div>
                   )}
@@ -508,12 +508,12 @@ export default function Home() {
               )}
               
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email / Username</label>
+                <label className="block text-sm font-semibold text-slate-300 mb-1.5">Email / Username</label>
                 <input type="email" required value={email} onChange={e => setEmail(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all placeholder:text-slate-400" placeholder="name@example.com" />
               </div>
               
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                <label className="block text-sm font-semibold text-slate-300 mb-1.5">Password</label>
                 <div className="relative">
                   <input type={showPassword ? "text" : "password"} required value={password} onChange={e => setPassword(e.target.value)} className="w-full pl-4 pr-12 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all placeholder:text-slate-400 tracking-wide" placeholder="••••••••" />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1">
@@ -535,9 +535,9 @@ export default function Home() {
                 <div className="flex items-center justify-between text-sm pt-1">
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer transition-colors" />
-                    <span className="text-slate-600 font-medium group-hover:text-slate-800 transition-colors">Remember Me</span>
+                    <span className="text-slate-600 font-medium group-hover:text-slate-200 transition-colors">Remember Me</span>
                   </label>
-                  <button type="button" onClick={handleResetPassword} className="text-blue-600 font-semibold hover:text-blue-700 hover:underline transition-all">
+                  <button type="button" onClick={handleResetPassword} className="text-blue-600 font-semibold hover:text-cyan-200 hover:underline transition-all">
                     Forgot Password?
                   </button>
                 </div>
@@ -553,7 +553,7 @@ export default function Home() {
               )}
               
               {authMsg && (
-                <div className="bg-green-50 text-green-700 px-4 py-3 rounded-xl border border-green-100 text-sm font-medium flex items-center gap-2">
+                <div className="bg-green-50 text-green-400 px-4 py-3 rounded-xl border border-green-100 text-sm font-medium flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 flex-shrink-0">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
                   </svg>
@@ -624,7 +624,7 @@ export default function Home() {
         </div>
         
         <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 custom-scrollbar">
-          <button onClick={() => { setStudentTab('dashboard'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'dashboard' ? 'bg-cyan-500 text-black text-white shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
+          <button onClick={() => { setStudentTab('dashboard'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'dashboard' ? 'bg-cyan-500 text-black shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
             Dashboard
           </button>
@@ -634,19 +634,19 @@ export default function Home() {
             Mock Tests
           </button>
           
-          <button onClick={() => { setStudentTab('chat'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'chat' ? 'bg-cyan-500 text-black text-white shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
+          <button onClick={() => { setStudentTab('chat'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'chat' ? 'bg-cyan-500 text-black shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
             AI Tutor
           </button>
           
-          <button onClick={() => { setStudentTab('study_vault'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'study_vault' ? 'bg-cyan-500 text-black text-white shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
+          <button onClick={() => { setStudentTab('study_vault'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'study_vault' ? 'bg-cyan-500 text-black shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
             Study Vault
           </button>
           
           
           
-          <button onClick={() => { setStudentTab('bookmarks'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'bookmarks' ? 'bg-cyan-500 text-black text-white shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
+          <button onClick={() => { setStudentTab('bookmarks'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'bookmarks' ? 'bg-cyan-500 text-black shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
             Saved Doubts
           </button>
@@ -688,7 +688,7 @@ export default function Home() {
                    🏆 0 Points
                 </div>
              </div>
-             <div className="flex items-center gap-2 bg-cyan-950/40 text-blue-700 px-4 py-1.5 rounded-full border border-blue-100 shadow-sm whitespace-nowrap">
+             <div className="flex items-center gap-2 bg-cyan-950/40 text-cyan-200 px-4 py-1.5 rounded-full border border-blue-100 shadow-sm whitespace-nowrap">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 <span className="font-bold text-sm">Class {classNum}th</span>
              </div>
@@ -709,7 +709,7 @@ export default function Home() {
                    <p className="text-blue-100 font-medium">Ready to conquer your JEE goals today? You have {credits} credits left.</p>
                 </div>
                 <div className="flex gap-3">
-                   <button onClick={() => setStudentTab('chat')} className="bg-cyan-500 text-black text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-blue-700 transition-colors flex items-center gap-2">
+                   <button onClick={() => setStudentTab('chat')} className="bg-cyan-500 text-black px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-blue-700 transition-colors flex items-center gap-2">
                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                      Ask a Doubt
                    </button>
@@ -792,7 +792,7 @@ export default function Home() {
                       <p className="text-cyan-200 font-medium leading-relaxed mb-6">
                         You are taking <span className="font-black bg-indigo-200 px-1 rounded">3 minutes per question</span> on Rotational Dynamics. Let's practice some standard problems to improve your speed and accuracy.
                       </p>
-                      <button onClick={() => setStudentTab('chat')} className="w-full bg-cyan-500 text-black hover:bg-cyan-400 text-black text-white font-bold py-3.5 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
+                      <button onClick={() => setStudentTab('chat')} className="w-full bg-cyan-500 text-black hover:bg-cyan-400 text-black font-bold py-3.5 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
                         Start Directed Practice
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                       </button>
@@ -856,7 +856,7 @@ export default function Home() {
                           { role: 'assistant', content: faq.answer, sources: faq.sources }
                         ]);
                       }}
-                      className="bg-[#111111] border border-blue-200 hover:border-blue-400 text-blue-700 hover:bg-cyan-950/40 px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm hover:shadow text-left"
+                      className="bg-[#111111] border border-blue-200 hover:border-blue-400 text-cyan-200 hover:bg-cyan-950/40 px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm hover:shadow text-left"
                     >
                       {faq.question.length > 35 ? faq.question.substring(0, 35) + '...' : faq.question}
                     </button>
@@ -973,7 +973,7 @@ export default function Home() {
                      </ReactMarkdown>
                    </div>
                    <div className="mt-4 pt-3 border-t border-slate-800 flex justify-end">
-                     <button onClick={() => setSavedDoubts(prev => prev.filter((_, idx) => idx !== i))} className="text-xs text-red-500 hover:text-red-700 font-semibold">Remove</button>
+                     <button onClick={() => setSavedDoubts(prev => prev.filter((_, idx) => idx !== i))} className="text-xs text-red-500 hover:text-red-400 font-semibold">Remove</button>
                    </div>
                 </div>
               ))}
@@ -1031,7 +1031,7 @@ export default function Home() {
                 </div>
              </div>
              <div className="mt-6 p-4 bg-cyan-950/40 rounded-xl border border-blue-100">
-               <p className="text-sm font-semibold text-blue-800">💡 AI Recommendation: You are taking 3 minutes per question on Rotational Dynamics. Try practicing standard problems to increase speed.</p>
+               <p className="text-sm font-semibold text-cyan-100">💡 AI Recommendation: You are taking 3 minutes per question on Rotational Dynamics. Try practicing standard problems to increase speed.</p>
              </div>
           </div>
         </main>
@@ -1063,7 +1063,7 @@ export default function Home() {
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="absolute right-2 p-2.5 bg-cyan-500 text-black text-white rounded-full hover:bg-blue-700 hover:shadow-md disabled:opacity-40 disabled:hover:bg-cyan-500 text-black disabled:hover:shadow-none transition-all active:scale-95"
+            className="absolute right-2 p-2.5 bg-cyan-500 text-black rounded-full hover:bg-blue-700 hover:shadow-md disabled:opacity-40 disabled:hover:bg-cyan-500 text-black disabled:hover:shadow-none transition-all active:scale-95"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
               <path d="M3.478 2.404a.75.75 0 00-.926.941l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.404z" />
@@ -1129,11 +1129,11 @@ export default function Home() {
             </div>
             
             <div className="bg-cyan-950/40 border border-blue-100 rounded-2xl p-6 mb-8 shadow-sm">
-              <h3 className="text-blue-800 font-bold text-lg mb-2 flex items-center gap-2">
+              <h3 className="text-cyan-100 font-bold text-lg mb-2 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-3.832-2.954C5.166 15.657 3 13.09 3 10.519 3 5.815 7.028 2 12 2c4.972 0 9 3.815 9 8.519 0 2.571-2.166 5.138-4.784 7.425a15.246 15.246 0 01-3.832 2.954l-.022.012-.007.003a.752.752 0 01-.708 0z" /></svg>
                 AI Feedback
               </h3>
-              <p className="text-blue-900 leading-relaxed font-medium">{quizAnalysis.feedback}</p>
+              <p className="text-cyan-50 leading-relaxed font-medium">{quizAnalysis.feedback}</p>
             </div>
 
             <div className="space-y-6">
@@ -1148,8 +1148,8 @@ export default function Home() {
                       <p className="font-semibold text-white text-lg">{q.question}</p>
                     </div>
                     <div className="pl-9 space-y-2 text-sm font-medium">
-                      <p className="text-slate-300">Your Answer: <span className={isCorrect ? 'text-green-700 font-bold' : 'text-red-700 font-bold'}>{userAnswers[q.id] || "Not answered"}</span></p>
-                      {!isCorrect && <p className="text-slate-300">Correct Answer: <span className="text-green-700 font-bold">{q.correctAnswer}</span></p>}
+                      <p className="text-slate-300">Your Answer: <span className={isCorrect ? 'text-green-400 font-bold' : 'text-red-400 font-bold'}>{userAnswers[q.id] || "Not answered"}</span></p>
+                      {!isCorrect && <p className="text-slate-300">Correct Answer: <span className="text-green-400 font-bold">{q.correctAnswer}</span></p>}
                       <div className="mt-4 p-4 bg-[#111111]/60 rounded-xl border border-white/40">
                         <p className="text-white leading-relaxed"><strong>Explanation:</strong> {ansObj?.explanation}</p>
                       </div>
@@ -1219,7 +1219,7 @@ export default function Home() {
                 <button
                   key={lvl}
                   onClick={() => setTestDifficulty(lvl)}
-                  className={`py-4 px-5 rounded-xl font-bold text-sm transition-all border text-left flex justify-between items-center ${testDifficulty === lvl ? 'bg-cyan-950/40 text-blue-700 border-blue-500 shadow-md ring-1 ring-blue-500' : 'bg-[#111111] text-slate-300 border-slate-800 hover:bg-[#0a0a0a] hover:border-slate-300'}`}
+                  className={`py-4 px-5 rounded-xl font-bold text-sm transition-all border text-left flex justify-between items-center ${testDifficulty === lvl ? 'bg-cyan-950/40 text-cyan-200 border-blue-500 shadow-md ring-1 ring-blue-500' : 'bg-[#111111] text-slate-300 border-slate-800 hover:bg-[#0a0a0a] hover:border-slate-300'}`}
                 >
                   <span className="text-base">{lvl}</span>
                   {testDifficulty === lvl && (
@@ -1231,7 +1231,7 @@ export default function Home() {
               ))}
             </div>
             <div className="mt-5 p-4 rounded-xl bg-cyan-950/40 border border-blue-100 shadow-inner">
-              <p className="text-sm text-blue-800 font-medium leading-relaxed">
+              <p className="text-sm text-cyan-100 font-medium leading-relaxed">
                 {testDifficulty === 'Easy' && '💡 Focuses on direct NCERT Board Level theory questions.'}
                 {testDifficulty === 'Medium' && '🚀 Focuses on JEE Main & NEET Level applications.'}
                 {testDifficulty === 'Hard' && '🔥 Focuses on JEE Advanced Level conceptual deep dives.'}
