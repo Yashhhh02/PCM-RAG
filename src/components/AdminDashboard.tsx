@@ -476,12 +476,12 @@ export default function AdminDashboard({ session, handleLogout }: { session: any
                                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-red-500">
                                         <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z" clipRule="evenodd" />
                                       </svg>
-                                      PDF Chunk #{idx + 1}
+                                      PDF Chunk #{idx + 1} (Page {chunk.page})
                                     </h4>
-                                    <span className="text-[10px] font-mono bg-slate-100 text-slate-500 px-2 py-1 rounded">ID: {chunk.id.substring(0,8)}...</span>
+                                    <span className="text-[10px] font-mono bg-slate-100 text-slate-500 px-2 py-1 rounded">ID: {chunk.id.toString().substring(0,8)}...</span>
                                   </div>
                                   <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 max-h-32 overflow-y-auto text-sm text-slate-700 font-serif leading-relaxed">
-                                    {chunk.page_content}
+                                    {chunk.content}
                                   </div>
                                 </div>
                               ))}

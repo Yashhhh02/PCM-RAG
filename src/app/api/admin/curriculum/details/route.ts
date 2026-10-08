@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     // Fetch chunks for this specific folder
     const { data, error } = await supabaseAdmin
       .from('chunks')
-      .select('id, page_content, metadata')
+      .select('id, content, page')
       .eq('subject', subject)
       .eq('class', className)
       .eq('chapter', chapter);
