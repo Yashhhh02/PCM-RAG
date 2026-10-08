@@ -653,26 +653,35 @@ export default function AdminDashboard({ session, handleLogout }: { session: any
                           )}
 
                           {activeDocTab === 'notes' && (
-                            <div className="space-y-4 animate-in fade-in">
-                              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Raw Text Chunks from Database</h3>
+                            <div className="space-y-8 animate-in fade-in">
                               {isFolderLoading ? (
                                 <div className="py-12 flex justify-center">
                                   <div className="w-8 h-8 border-4 border-slate-200 border-t-orange-500 rounded-full animate-spin"></div>
                                 </div>
                               ) : folderData.length > 0 ? (
-                                folderData.map((chunk, idx) => (
-                                  <div key={chunk.id} className="bg-slate-50 border border-slate-200 rounded-2xl p-5 hover:border-orange-300 transition-colors">
-                                    <div className="flex justify-between items-center mb-3">
-                                      <span className="text-xs font-bold text-slate-700 bg-white px-2 py-1 rounded shadow-sm border border-slate-100">Page {chunk.page} • Chunk #{idx + 1}</span>
-                                      <span className="text-[10px] text-slate-400 font-mono">{chunk.id.toString().substring(0,8)}</span>
+                                <div className="prose prose-slate max-w-none">
+                                  {folderData.map((chunk, idx) => (
+                                    <div key={chunk.id} className="mb-12 relative">
+                                      <div className="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-orange-200 to-orange-50 rounded-full"></div>
+                                      <div className="pl-6">
+                                        <div className="flex items-center gap-2 mb-4">
+                                          <span className="text-[10px] font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded tracking-widest uppercase">Page {chunk.page}</span>
+                                          <div className="flex-1 h-px bg-slate-100"></div>
+                                        </div>
+                                        <div className="text-slate-700 leading-loose font-serif text-lg whitespace-pre-wrap">
+                                          {chunk.content.replace(/\n\n+/g, '\n\n')}
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="text-sm text-slate-700 leading-relaxed font-serif whitespace-pre-wrap max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-                                      {chunk.content}
-                                    </div>
-                                  </div>
-                                ))
+                                  ))}
+                                </div>
                               ) : (
-                                <p className="text-center text-slate-500 py-10">No chunks available.</p>
+                                <div className="text-center py-16 bg-slate-50 rounded-2xl border border-slate-100">
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 mx-auto text-slate-300 mb-4">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                  </svg>
+                                  <p className="text-slate-500 font-medium">No textbook content available yet.</p>
+                                </div>
                               )}
                             </div>
                           )}
