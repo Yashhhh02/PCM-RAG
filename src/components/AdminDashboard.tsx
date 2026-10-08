@@ -10,6 +10,10 @@ export default function AdminDashboard({ session, handleLogout }: { session: any
   const [activeTab, setActiveTab] = useState('study_vault'); // Defaulting to study_vault for testing/showcasing
   const [vaultGrade, setVaultGrade] = useState('11');
   const [vaultSubject, setVaultSubject] = useState('All');
+  
+  const [selectedFolder, setSelectedFolder] = useState<any | null>(null);
+  const [folderData, setFolderData] = useState<any[]>([]);
+  const [isFolderLoading, setIsFolderLoading] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -39,6 +43,31 @@ export default function AdminDashboard({ session, handleLogout }: { session: any
       }
     } catch (error) {
       console.error("Failed to fetch curriculum", error);
+    }
+  };
+
+  const handleOpenFolder = async (folder: any) => {
+    setSelectedFolder(folder);
+    setIsFolderLoading(true);
+    setFolderData([]);
+    try {
+      const res = await fetch('/api/admin/curriculum/details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject: folder.subject,
+          className: folder.class,
+          chapter: folder.chapter
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setFolderData(data.chunks);
+      }
+    } catch (error) {
+      console.error("Failed to fetch folder details", error);
+    } finally {
+      setIsFolderLoading(false);
     }
   };
 
@@ -348,7 +377,7 @@ export default function AdminDashboard({ session, handleLogout }: { session: any
                   {/* Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {filteredCurriculum.map((c, i) => (
-                      <div key={i} className={`bg-white rounded-2xl border-2 p-5 flex flex-col justify-between transition-transform hover:-translate-y-1 hover:shadow-lg cursor-pointer
+                      <div key={i} onClick={() => handleOpenFolder(c)} className={`bg-white rounded-2xl border-2 p-5 flex flex-col justify-between transition-transform hover:-translate-y-1 hover:shadow-lg cursor-pointer
                         ${c.subject.toLowerCase() === 'math' ? 'border-purple-200 hover:border-purple-400 shadow-purple-500/10' : 
                           c.subject.toLowerCase() === 'physics' ? 'border-blue-200 hover:border-blue-400 shadow-blue-500/10' : 
                           'border-amber-200 hover:border-amber-400 shadow-amber-500/10'}`}>
@@ -402,6 +431,71 @@ export default function AdminDashboard({ session, handleLogout }: { session: any
                       <p className="text-sm">Try changing the Grade or Subject filter.</p>
                     </div>
                   )}
+
+                  {/* Folder Modal */}
+                  {selectedFolder && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-opacity">
+                      <div className="bg-white w-full max-w-4xl max-h-[85vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                        
+                        {/* Header */}
+                        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                          <div className="flex items-center gap-4">
+                            <div className="p-2.5 bg-white rounded-xl shadow-sm border border-slate-200 text-blue-600">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                              </svg>
+                            </div>
+                            <div>
+                              <h2 className="text-xl font-extrabold text-slate-800 capitalize flex items-center gap-2">
+                                {selectedFolder.chapter.replace(/-/g, ' ')}
+                                <span className="text-xs px-2 py-0.5 rounded-md bg-slate-200 text-slate-600 font-bold uppercase">{selectedFolder.subject}</span>
+                              </h2>
+                              <p className="text-sm font-medium text-slate-500">Class {selectedFolder.class} • {selectedFolder.chunkCount} PDF Chunks in Vector DB</p>
+                            </div>
+                          </div>
+                          <button onClick={() => setSelectedFolder(null)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 overflow-y-auto p-6 bg-slate-50/50">
+                          {isFolderLoading ? (
+                            <div className="flex flex-col items-center justify-center h-48 space-y-4">
+                              <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                              <p className="text-sm font-bold text-slate-400">Loading vector chunks...</p>
+                            </div>
+                          ) : (
+                            <div className="space-y-4">
+                              {folderData.map((chunk, idx) => (
+                                <div key={chunk.id} className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm hover:border-blue-300 transition-colors">
+                                  <div className="flex justify-between items-start mb-3">
+                                    <h4 className="font-bold text-slate-800 flex items-center gap-2">
+                                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-red-500">
+                                        <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z" clipRule="evenodd" />
+                                      </svg>
+                                      PDF Chunk #{idx + 1}
+                                    </h4>
+                                    <span className="text-[10px] font-mono bg-slate-100 text-slate-500 px-2 py-1 rounded">ID: {chunk.id.substring(0,8)}...</span>
+                                  </div>
+                                  <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 max-h-32 overflow-y-auto text-sm text-slate-700 font-serif leading-relaxed">
+                                    {chunk.page_content}
+                                  </div>
+                                </div>
+                              ))}
+                              {folderData.length === 0 && !isFolderLoading && (
+                                <p className="text-center text-slate-500">No chunks found in the database for this chapter.</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                      </div>
+                    </div>
+                  )}
+
                 </div>
               );
             })()}
