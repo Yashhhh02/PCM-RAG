@@ -9,18 +9,32 @@ export async function GET() {
     // We use the service key to bypass RLS for admin dashboard
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
     
-    // Fetch unique chapters
-    const { data, error } = await supabaseAdmin
-      .from('chunks')
-      .select('subject, class, chapter');
+    let allData: any[] = [];
+    let hasMore = true;
+    let offset = 0;
+    const limit = 1000;
 
-    if (error) {
-      throw error;
+    while (hasMore) {
+      const { data, error } = await supabaseAdmin
+        .from('chunks')
+        .select('subject, class, chapter')
+        .range(offset, offset + limit - 1);
+
+      if (error) {
+        throw error;
+      }
+
+      if (data && data.length > 0) {
+        allData = [...allData, ...data];
+        offset += limit;
+      } else {
+        hasMore = false;
+      }
     }
 
     // Group the data
     const grouped: any = {};
-    data.forEach((row: any) => {
+    allData.forEach((row: any) => {
       if (!row.chapter) return;
       
       const key = `${row.class}_${row.subject}_${row.chapter}`;
