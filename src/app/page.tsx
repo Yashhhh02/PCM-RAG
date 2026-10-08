@@ -599,7 +599,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-200 overflow-hidden">
+    <div className="flex h-screen bg-[#0a0a0a] text-slate-100 font-sans selection:bg-blue-200 overflow-hidden">
       
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
@@ -609,7 +609,7 @@ export default function Home() {
       {/* Sidebar Drawer (Mobile & Desktop) */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 transform transition-transform duration-300 ease-in-out shadow-2xl ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="p-6 flex items-center gap-3 border-b border-slate-800/50">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+          <div className="w-8 h-8 bg-cyan-500 text-black rounded-lg flex items-center justify-center shadow-sm">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-white">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
             </svg>
@@ -618,35 +618,35 @@ export default function Home() {
             <h2 className="font-bold text-white text-lg leading-tight tracking-wide">PCM RAG</h2>
             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">PCM Assistant</p>
           </div>
-          <button onClick={() => setIsSidebarOpen(false)} className="ml-auto text-slate-400 hover:text-white">
+          <button onClick={() => setIsSidebarOpen(false)} className="ml-auto text-slate-400 hover:text-cyan-100">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
         
         <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 custom-scrollbar">
-          <button onClick={() => { setStudentTab('dashboard'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'dashboard' ? 'bg-blue-600 text-white shadow-sm' : 'hover:bg-slate-800 hover:text-white'}`}>
+          <button onClick={() => { setStudentTab('dashboard'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'dashboard' ? 'bg-cyan-500 text-black text-white shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
             Dashboard
           </button>
           
-          <button onClick={() => { setShowTestModal(true); setIsTestMode(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all hover:bg-slate-800 hover:text-white`}>
+          <button onClick={() => { setShowTestModal(true); setIsTestMode(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all hover:bg-slate-800 hover:text-cyan-100`}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             Mock Tests
           </button>
           
-          <button onClick={() => { setStudentTab('chat'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'chat' ? 'bg-blue-600 text-white shadow-sm' : 'hover:bg-slate-800 hover:text-white'}`}>
+          <button onClick={() => { setStudentTab('chat'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'chat' ? 'bg-cyan-500 text-black text-white shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
             AI Tutor
           </button>
           
-          <button onClick={() => { setStudentTab('study_vault'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'study_vault' ? 'bg-blue-600 text-white shadow-sm' : 'hover:bg-slate-800 hover:text-white'}`}>
+          <button onClick={() => { setStudentTab('study_vault'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'study_vault' ? 'bg-cyan-500 text-black text-white shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
             Study Vault
           </button>
           
           
           
-          <button onClick={() => { setStudentTab('bookmarks'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'bookmarks' ? 'bg-blue-600 text-white shadow-sm' : 'hover:bg-slate-800 hover:text-white'}`}>
+          <button onClick={() => { setStudentTab('bookmarks'); setIsTestMode(false); setShowTestModal(false); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${studentTab === 'bookmarks' ? 'bg-cyan-500 text-black text-white shadow-sm' : 'hover:bg-slate-800 hover:text-cyan-100'}`}>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
             Saved Doubts
           </button>
@@ -659,7 +659,7 @@ export default function Home() {
               <p className="text-xs text-orange-400 font-medium">{credits} Credits</p>
             </div>
           </div>
-          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-700">
+          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold text-slate-400 hover:text-cyan-100 hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-700">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
             Sign Out
           </button>
@@ -667,15 +667,15 @@ export default function Home() {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 bg-[#0a0a0a] overflow-hidden">
         
         {/* Top Header */}
-        <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+        <header className="bg-[#111111] border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-20 shadow-sm">
           <div className="flex items-center gap-4">
-             <button onClick={() => setIsSidebarOpen(true)} className="p-2 -ml-2 text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
+             <button onClick={() => setIsSidebarOpen(true)} className="p-2 -ml-2 text-slate-300 hover:bg-slate-100 rounded-xl transition-colors">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
              </button>
-             <h1 className="text-xl font-bold text-slate-800 capitalize hidden sm:block">
+             <h1 className="text-xl font-bold text-white capitalize hidden sm:block">
                 {studentTab === 'chat' ? 'AI Tutor' : studentTab === 'study_vault' ? 'Study Vault' : studentTab.replace('_', ' ')}
              </h1>
           </div>
@@ -684,15 +684,15 @@ export default function Home() {
                 <div className="flex items-center gap-2 bg-orange-50 text-orange-600 px-3 py-1.5 rounded-full font-bold text-sm border border-orange-100 shadow-sm">
                    🔥 {dailyChallengeCompleted ? '1 Day Streak' : '0 Day Streak'}
                 </div>
-                <div className="flex items-center gap-2 bg-amber-50 text-amber-600 px-3 py-1.5 rounded-full font-bold text-sm border border-amber-100 shadow-sm">
+                <div className="flex items-center gap-2 bg-amber-950/40 text-amber-600 px-3 py-1.5 rounded-full font-bold text-sm border border-amber-100 shadow-sm">
                    🏆 0 Points
                 </div>
              </div>
-             <div className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full border border-blue-100 shadow-sm whitespace-nowrap">
+             <div className="flex items-center gap-2 bg-cyan-950/40 text-blue-700 px-4 py-1.5 rounded-full border border-blue-100 shadow-sm whitespace-nowrap">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 <span className="font-bold text-sm">Class {classNum}th</span>
              </div>
-             <button onClick={handleLogout} className="md:hidden flex items-center gap-2 text-slate-500 hover:text-red-500 font-bold text-sm px-3 py-1.5 bg-slate-100 rounded-full">
+             <button onClick={handleLogout} className="md:hidden flex items-center gap-2 text-slate-400 hover:text-red-500 font-bold text-sm px-3 py-1.5 bg-slate-100 rounded-full">
                 Sign Out
              </button>
           </div>
@@ -703,17 +703,17 @@ export default function Home() {
           <main className="flex-1 overflow-y-auto p-4 sm:p-8 w-full max-w-6xl mx-auto space-y-8 scroll-smooth">
              
              {/* Welcome Section */}
-             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900 rounded-3xl p-8 text-white shadow-md border border-slate-800">
+             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-[#161616] rounded-3xl p-8 text-white shadow-md border border-slate-800">
                 <div>
                    <h2 className="text-3xl font-black mb-2">Welcome back, {userName.split(' ')[0]}! 👋</h2>
                    <p className="text-blue-100 font-medium">Ready to conquer your JEE goals today? You have {credits} credits left.</p>
                 </div>
                 <div className="flex gap-3">
-                   <button onClick={() => setStudentTab('chat')} className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-blue-700 transition-colors flex items-center gap-2">
+                   <button onClick={() => setStudentTab('chat')} className="bg-cyan-500 text-black text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-blue-700 transition-colors flex items-center gap-2">
                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                      Ask a Doubt
                    </button>
-                   <button onClick={() => setShowTestModal(true)} className="bg-white text-slate-900 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-slate-50 transition-colors border border-slate-200">
+                   <button onClick={() => setShowTestModal(true)} className="bg-[#111111] text-slate-100 px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm hover:bg-[#0a0a0a] transition-colors border border-slate-800">
                      Take a Test
                    </button>
                 </div>
@@ -721,32 +721,32 @@ export default function Home() {
 
              {/* Top Stats Row (Moved from Performance) */}
              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col hover:shadow-md transition-shadow">
+                <div className="bg-[#111111] p-6 rounded-3xl shadow-sm border border-slate-800 flex flex-col hover:shadow-md transition-shadow">
                    <div className="flex items-center gap-3 mb-2">
-                     <div className="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center">
+                     <div className="w-10 h-10 bg-cyan-950/40 text-cyan-400 rounded-xl flex items-center justify-center">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                      </div>
-                     <p className="text-slate-500 font-bold text-sm uppercase tracking-wider">Tests Taken</p>
+                     <p className="text-slate-400 font-bold text-sm uppercase tracking-wider">Tests Taken</p>
                    </div>
-                   <p className="text-4xl font-black text-slate-800 mt-2">5</p>
+                   <p className="text-4xl font-black text-white mt-2">5</p>
                 </div>
                 
-                <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col hover:shadow-md transition-shadow">
+                <div className="bg-[#111111] p-6 rounded-3xl shadow-sm border border-slate-800 flex flex-col hover:shadow-md transition-shadow">
                    <div className="flex items-center gap-3 mb-2">
-                     <div className="w-10 h-10 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center">
+                     <div className="w-10 h-10 bg-emerald-950/40 text-emerald-500 rounded-xl flex items-center justify-center">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
                      </div>
-                     <p className="text-slate-500 font-bold text-sm uppercase tracking-wider">Avg. Accuracy</p>
+                     <p className="text-slate-400 font-bold text-sm uppercase tracking-wider">Avg. Accuracy</p>
                    </div>
                    <p className="text-4xl font-black text-emerald-500 mt-2">76%</p>
                 </div>
                 
-                <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col hover:shadow-md transition-shadow">
+                <div className="bg-[#111111] p-6 rounded-3xl shadow-sm border border-slate-800 flex flex-col hover:shadow-md transition-shadow">
                    <div className="flex items-center gap-3 mb-2">
-                     <div className="w-10 h-10 bg-purple-50 text-purple-500 rounded-xl flex items-center justify-center">
+                     <div className="w-10 h-10 bg-purple-950/40 text-purple-500 rounded-xl flex items-center justify-center">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                      </div>
-                     <p className="text-slate-500 font-bold text-sm uppercase tracking-wider">Strongest Subject</p>
+                     <p className="text-slate-400 font-bold text-sm uppercase tracking-wider">Strongest Subject</p>
                    </div>
                    <p className="text-3xl font-black text-purple-600 mt-2">Physics</p>
                 </div>
@@ -754,45 +754,45 @@ export default function Home() {
 
              {/* SWOT & AI Recommendation */}
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                   <h3 className="font-bold text-xl text-slate-800 mb-6 flex items-center gap-2">
-                     <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                <div className="bg-[#111111] p-8 rounded-3xl shadow-sm border border-slate-800">
+                   <h3 className="font-bold text-xl text-white mb-6 flex items-center gap-2">
+                     <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                      Topic Strengths (SWOT)
                    </h3>
                    <div className="space-y-5">
                       <div>
                          <div className="flex justify-between text-sm mb-2">
-                            <span className="font-bold text-slate-700">Newton's Laws of Motion</span>
-                            <span className="text-emerald-500 font-bold bg-emerald-50 px-2 py-0.5 rounded text-xs">Strong (90%)</span>
+                            <span className="font-bold text-slate-200">Newton's Laws of Motion</span>
+                            <span className="text-emerald-500 font-bold bg-emerald-950/40 px-2 py-0.5 rounded text-xs">Strong (90%)</span>
                          </div>
-                         <div className="w-full bg-slate-100 rounded-full h-3"><div className="bg-emerald-500 h-3 rounded-full" style={{width: '90%'}}></div></div>
+                         <div className="w-full bg-slate-100 rounded-full h-3"><div className="bg-emerald-950/400 h-3 rounded-full" style={{width: '90%'}}></div></div>
                       </div>
                       <div>
                          <div className="flex justify-between text-sm mb-2">
-                            <span className="font-bold text-slate-700">Rotational Dynamics</span>
-                            <span className="text-amber-500 font-bold bg-amber-50 px-2 py-0.5 rounded text-xs">Review (45%)</span>
+                            <span className="font-bold text-slate-200">Rotational Dynamics</span>
+                            <span className="text-amber-500 font-bold bg-amber-950/40 px-2 py-0.5 rounded text-xs">Review (45%)</span>
                          </div>
-                         <div className="w-full bg-slate-100 rounded-full h-3"><div className="bg-amber-500 h-3 rounded-full" style={{width: '45%'}}></div></div>
+                         <div className="w-full bg-slate-100 rounded-full h-3"><div className="bg-amber-950/400 h-3 rounded-full" style={{width: '45%'}}></div></div>
                       </div>
                       <div>
                          <div className="flex justify-between text-sm mb-2">
-                            <span className="font-bold text-slate-700">Thermodynamics</span>
-                            <span className="text-red-500 font-bold bg-red-50 px-2 py-0.5 rounded text-xs">Weak (20%)</span>
+                            <span className="font-bold text-slate-200">Thermodynamics</span>
+                            <span className="text-red-500 font-bold bg-red-950/40 px-2 py-0.5 rounded text-xs">Weak (20%)</span>
                          </div>
-                         <div className="w-full bg-slate-100 rounded-full h-3"><div className="bg-red-500 h-3 rounded-full" style={{width: '20%'}}></div></div>
+                         <div className="w-full bg-slate-100 rounded-full h-3"><div className="bg-red-950/400 h-3 rounded-full" style={{width: '20%'}}></div></div>
                       </div>
                    </div>
                 </div>
 
                 <div className="flex flex-col gap-6">
                    <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-3xl shadow-sm border border-indigo-100 flex-1">
-                      <h3 className="font-bold text-xl text-indigo-900 mb-4 flex items-center gap-2">
+                      <h3 className="font-bold text-xl text-cyan-100 mb-4 flex items-center gap-2">
                         <span className="text-2xl">🤖</span> AI Recommendation
                       </h3>
-                      <p className="text-indigo-800 font-medium leading-relaxed mb-6">
+                      <p className="text-cyan-200 font-medium leading-relaxed mb-6">
                         You are taking <span className="font-black bg-indigo-200 px-1 rounded">3 minutes per question</span> on Rotational Dynamics. Let's practice some standard problems to improve your speed and accuracy.
                       </p>
-                      <button onClick={() => setStudentTab('chat')} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
+                      <button onClick={() => setStudentTab('chat')} className="w-full bg-cyan-500 text-black hover:bg-cyan-400 text-black text-white font-bold py-3.5 rounded-xl shadow-md transition-colors flex justify-center items-center gap-2">
                         Start Directed Practice
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                       </button>
@@ -824,7 +824,7 @@ export default function Home() {
                 ]);
                 setDailyChallengeCompleted(true); 
               }}>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#111111]/20 rounded-full blur-2xl -mr-10 -mt-10"></div>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-2xl">🎯</span>
                   <h3 className="font-bold text-lg">Daily Challenge</h3>
@@ -833,12 +833,12 @@ export default function Home() {
               </div>
             )}
             <div className="w-24 h-24 mb-6 bg-gradient-to-tr from-blue-100 to-indigo-50 rounded-full flex items-center justify-center shadow-inner">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-blue-500">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-cyan-400">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09l2.846.813-.813 2.846a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold text-slate-800 mb-3 text-center">Hi, {userName}!</h2>
-            <p className="text-slate-500 text-center max-w-md mb-8">
+            <h2 className="text-3xl font-bold text-white mb-3 text-center">Hi, {userName}!</h2>
+            <p className="text-slate-400 text-center max-w-md mb-8">
               Select your subject and class above, then ask me any question from the NCERT syllabus.
             </p>
 
@@ -856,7 +856,7 @@ export default function Home() {
                           { role: 'assistant', content: faq.answer, sources: faq.sources }
                         ]);
                       }}
-                      className="bg-white border border-blue-200 hover:border-blue-400 text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm hover:shadow text-left"
+                      className="bg-[#111111] border border-blue-200 hover:border-blue-400 text-blue-700 hover:bg-cyan-950/40 px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm hover:shadow text-left"
                     >
                       {faq.question.length > 35 ? faq.question.substring(0, 35) + '...' : faq.question}
                     </button>
@@ -869,10 +869,10 @@ export default function Home() {
                   <button
                     key={i}
                     onClick={() => setInput(q)}
-                    className="bg-white border border-slate-200 hover:border-blue-400 hover:shadow-md text-left px-5 py-4 rounded-2xl text-slate-700 transition-all duration-200 group flex justify-between items-center"
+                    className="bg-[#111111] border border-slate-800 hover:border-blue-400 hover:shadow-md text-left px-5 py-4 rounded-2xl text-slate-200 transition-all duration-200 group flex justify-between items-center"
                   >
-                    <span className="font-medium group-hover:text-blue-600 transition-colors">{q}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors">
+                    <span className="font-medium group-hover:text-cyan-400 transition-colors">{q}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-slate-300 group-hover:text-cyan-400 transition-colors">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                     </svg>
                   </button>
@@ -885,8 +885,8 @@ export default function Home() {
         {isGeneratingQuiz && (
           <div className="flex flex-col items-center justify-center h-full animate-fade-in-up mt-10">
              <div className="w-16 h-16 rounded-full border-4 border-blue-200 border-t-blue-600 animate-spin mb-4"></div>
-             <h3 className="text-xl font-bold text-slate-800">Generating Your Mock Test...</h3>
-             <p className="text-slate-500 mt-2">Our AI is picking the best questions from the syllabus.</p>
+             <h3 className="text-xl font-bold text-white">Generating Your Mock Test...</h3>
+             <p className="text-slate-400 mt-2">Our AI is picking the best questions from the syllabus.</p>
           </div>
         )}
 
@@ -900,29 +900,29 @@ export default function Home() {
                     <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-3.832-2.954C5.166 15.657 3 13.09 3 10.519 3 5.815 7.028 2 12 2c4.972 0 9 3.815 9 8.519 0 2.571-2.166 5.138-4.784 7.425a15.246 15.246 0 01-3.832 2.954l-.022.012-.007.003a.752.752 0 01-.708 0z" />
                   </svg>
                 </div>
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">PCM Assistant</span>
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">PCM Assistant</span>
               </div>
             )}
 
             <div className={`px-5 py-4 rounded-2xl shadow-sm ${msg.role === 'user'
                 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-sm shadow-blue-500/20'
-                : 'bg-white border border-slate-100 text-slate-800 rounded-bl-sm'
+                : 'bg-[#111111] border border-slate-800 text-white rounded-bl-sm'
               }`}>
 
               {msg.role === 'user' ? (
                 <p className="whitespace-pre-wrap font-medium">{msg.content}</p>
               ) : (
-                <div className="prose prose-sm sm:prose-base prose-slate max-w-none prose-p:leading-relaxed prose-headings:text-slate-800 prose-a:text-blue-600">
+                <div className="prose prose-sm sm:prose-base prose-slate max-w-none prose-p:leading-relaxed prose-headings:text-white prose-a:text-cyan-400">
                   <ReactMarkdown
                     remarkPlugins={[remarkMath]}
                     rehypePlugins={[rehypeKatex]}
                   >
                     {normalizeMath(msg.content)}
                   </ReactMarkdown>
-                  <div className="mt-4 pt-3 border-t border-slate-100 flex justify-end">
+                  <div className="mt-4 pt-3 border-t border-slate-800 flex justify-end">
                     <button 
                       onClick={() => setSavedDoubts(prev => [...prev, msg])}
-                      className="text-xs font-bold text-amber-500 bg-amber-50 px-3 py-1.5 rounded-lg hover:bg-amber-100 transition-colors flex items-center gap-1.5"
+                      className="text-xs font-bold text-amber-500 bg-amber-950/40 px-3 py-1.5 rounded-lg hover:bg-amber-100 transition-colors flex items-center gap-1.5"
                     >
                       <span>⭐</span> Save Doubt
                     </button>
@@ -940,10 +940,10 @@ export default function Home() {
               <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-slate-200 to-slate-300 flex items-center justify-center animate-pulse"></div>
               <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider animate-pulse">Thinking...</span>
             </div>
-            <div className="px-5 py-4 rounded-2xl rounded-bl-sm bg-white border border-slate-100 shadow-sm flex items-center space-x-2 h-[52px]">
-              <div className="w-2 h-2 bg-blue-500/60 rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-blue-500/60 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
-              <div className="w-2 h-2 bg-blue-500/60 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+            <div className="px-5 py-4 rounded-2xl rounded-bl-sm bg-[#111111] border border-slate-800 shadow-sm flex items-center space-x-2 h-[52px]">
+              <div className="w-2 h-2 bg-cyan-500/60 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-cyan-500/60 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
+              <div className="w-2 h-2 bg-cyan-500/60 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
             </div>
           </div>
         )}
@@ -957,22 +957,22 @@ export default function Home() {
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 w-full max-w-4xl mx-auto flex flex-col space-y-6">
           <div className="flex items-center gap-3 mb-6">
              <span className="text-3xl">⭐</span>
-             <h2 className="text-2xl font-bold text-slate-800">Saved Doubts</h2>
+             <h2 className="text-2xl font-bold text-white">Saved Doubts</h2>
           </div>
           {savedDoubts.length === 0 ? (
-            <div className="text-center text-slate-500 py-10 bg-white rounded-3xl shadow-sm border border-slate-100">
+            <div className="text-center text-slate-400 py-10 bg-[#111111] rounded-3xl shadow-sm border border-slate-800">
                No saved doubts yet. Click the ⭐ button on any AI response to save it for quick revision!
             </div>
           ) : (
             <div className="space-y-6">
               {savedDoubts.map((doubt, i) => (
-                <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div key={i} className="bg-[#111111] p-6 rounded-2xl shadow-sm border border-slate-800">
                    <div className="prose prose-sm sm:prose-base prose-slate max-w-none prose-p:leading-relaxed">
                      <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                        {normalizeMath(doubt.content)}
                      </ReactMarkdown>
                    </div>
-                   <div className="mt-4 pt-3 border-t border-slate-100 flex justify-end">
+                   <div className="mt-4 pt-3 border-t border-slate-800 flex justify-end">
                      <button onClick={() => setSavedDoubts(prev => prev.filter((_, idx) => idx !== i))} className="text-xs text-red-500 hover:text-red-700 font-semibold">Remove</button>
                    </div>
                 </div>
@@ -987,50 +987,50 @@ export default function Home() {
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 w-full max-w-4xl mx-auto flex flex-col space-y-6">
           <div className="flex items-center gap-3 mb-6">
              <span className="text-3xl">📊</span>
-             <h2 className="text-2xl font-bold text-slate-800">Performance Dashboard</h2>
+             <h2 className="text-2xl font-bold text-white">Performance Dashboard</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-             <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col items-center justify-center">
-                <p className="text-slate-500 font-medium text-sm">Tests Taken</p>
-                <p className="text-4xl font-black text-blue-600 mt-2">5</p>
+             <div className="bg-[#111111] p-6 rounded-3xl shadow-sm border border-slate-800 flex flex-col items-center justify-center">
+                <p className="text-slate-400 font-medium text-sm">Tests Taken</p>
+                <p className="text-4xl font-black text-cyan-400 mt-2">5</p>
              </div>
-             <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col items-center justify-center">
-                <p className="text-slate-500 font-medium text-sm">Avg. Accuracy</p>
+             <div className="bg-[#111111] p-6 rounded-3xl shadow-sm border border-slate-800 flex flex-col items-center justify-center">
+                <p className="text-slate-400 font-medium text-sm">Avg. Accuracy</p>
                 <p className="text-4xl font-black text-emerald-500 mt-2">76%</p>
              </div>
-             <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col items-center justify-center">
-                <p className="text-slate-500 font-medium text-sm">Strongest Subject</p>
+             <div className="bg-[#111111] p-6 rounded-3xl shadow-sm border border-slate-800 flex flex-col items-center justify-center">
+                <p className="text-slate-400 font-medium text-sm">Strongest Subject</p>
                 <p className="text-2xl font-black text-purple-600 mt-2">Physics</p>
              </div>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
-             <h3 className="font-bold text-lg text-slate-800 mb-4">Topic Strengths (SWOT Analysis)</h3>
+          <div className="bg-[#111111] p-6 rounded-3xl shadow-sm border border-slate-800">
+             <h3 className="font-bold text-lg text-white mb-4">Topic Strengths (SWOT Analysis)</h3>
              <div className="space-y-4">
                 <div>
                    <div className="flex justify-between text-sm mb-1">
-                      <span className="font-semibold text-slate-700">Newton's Laws of Motion</span>
+                      <span className="font-semibold text-slate-200">Newton's Laws of Motion</span>
                       <span className="text-emerald-500 font-bold">Strong (90%)</span>
                    </div>
-                   <div className="w-full bg-slate-100 rounded-full h-2.5"><div className="bg-emerald-500 h-2.5 rounded-full" style={{width: '90%'}}></div></div>
+                   <div className="w-full bg-slate-100 rounded-full h-2.5"><div className="bg-emerald-950/400 h-2.5 rounded-full" style={{width: '90%'}}></div></div>
                 </div>
                 <div>
                    <div className="flex justify-between text-sm mb-1">
-                      <span className="font-semibold text-slate-700">Rotational Dynamics</span>
+                      <span className="font-semibold text-slate-200">Rotational Dynamics</span>
                       <span className="text-amber-500 font-bold">Needs Revision (45%)</span>
                    </div>
-                   <div className="w-full bg-slate-100 rounded-full h-2.5"><div className="bg-amber-500 h-2.5 rounded-full" style={{width: '45%'}}></div></div>
+                   <div className="w-full bg-slate-100 rounded-full h-2.5"><div className="bg-amber-950/400 h-2.5 rounded-full" style={{width: '45%'}}></div></div>
                 </div>
                 <div>
                    <div className="flex justify-between text-sm mb-1">
-                      <span className="font-semibold text-slate-700">Thermodynamics</span>
+                      <span className="font-semibold text-slate-200">Thermodynamics</span>
                       <span className="text-red-500 font-bold">Weak (20%)</span>
                    </div>
-                   <div className="w-full bg-slate-100 rounded-full h-2.5"><div className="bg-red-500 h-2.5 rounded-full" style={{width: '20%'}}></div></div>
+                   <div className="w-full bg-slate-100 rounded-full h-2.5"><div className="bg-red-950/400 h-2.5 rounded-full" style={{width: '20%'}}></div></div>
                 </div>
              </div>
-             <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
+             <div className="mt-6 p-4 bg-cyan-950/40 rounded-xl border border-blue-100">
                <p className="text-sm font-semibold text-blue-800">💡 AI Recommendation: You are taking 3 minutes per question on Rotational Dynamics. Try practicing standard problems to increase speed.</p>
              </div>
           </div>
@@ -1039,14 +1039,14 @@ export default function Home() {
 
       {/* Input Area (Sticky & Glassmorphic) */}
       {studentTab === 'chat' && (
-      <footer className="backdrop-blur-xl bg-white/80 border-t border-slate-200/50 p-4 sm:p-6 w-full max-w-4xl mx-auto sticky bottom-0 z-20 print:hidden">
-        <form onSubmit={handleSubmit} className="flex relative items-center shadow-sm rounded-full bg-white border border-slate-200 focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
+      <footer className="backdrop-blur-xl bg-[#0a0a0a]/80 border-t border-slate-800/50 p-4 sm:p-6 w-full max-w-4xl mx-auto sticky bottom-0 z-20 print:hidden">
+        <form onSubmit={handleSubmit} className="flex relative items-center shadow-sm rounded-full bg-[#111111] border border-slate-800 focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
           <button
             type="button"
             onClick={startVoiceInput}
             disabled={isLoading}
             title="Voice Input"
-            className={`absolute left-2 p-2 rounded-full transition-all ${isRecording ? "text-red-500 animate-pulse" : "text-slate-400 hover:text-blue-500"}`}
+            className={`absolute left-2 p-2 rounded-full transition-all ${isRecording ? "text-red-500 animate-pulse" : "text-slate-400 hover:text-cyan-400"}`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill={isRecording ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
@@ -1058,12 +1058,12 @@ export default function Home() {
             onChange={(e) => setInput(e.target.value)}
             disabled={isLoading}
             placeholder={isRecording ? "Listening..." : "Ask a doubt from NCERT..."}
-            className="w-full pl-12 pr-14 py-4 rounded-full bg-transparent disabled:opacity-60 disabled:bg-slate-50 outline-none text-slate-700 font-medium placeholder:font-normal"
+            className="w-full pl-12 pr-14 py-4 rounded-full bg-transparent disabled:opacity-60 disabled:bg-[#0a0a0a] outline-none text-slate-200 font-medium placeholder:font-normal"
           />
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="absolute right-2 p-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 hover:shadow-md disabled:opacity-40 disabled:hover:bg-blue-600 disabled:hover:shadow-none transition-all active:scale-95"
+            className="absolute right-2 p-2.5 bg-cyan-500 text-black text-white rounded-full hover:bg-blue-700 hover:shadow-md disabled:opacity-40 disabled:hover:bg-cyan-500 text-black disabled:hover:shadow-none transition-all active:scale-95"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
               <path d="M3.478 2.404a.75.75 0 00-.926.941l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.404z" />
@@ -1085,10 +1085,10 @@ export default function Home() {
       ) : (
       <main className="flex-1 overflow-y-auto p-4 sm:p-6 w-full max-w-4xl mx-auto flex flex-col space-y-6 scroll-smooth">
         {!quizAnalysis ? (
-          <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-8">
+          <div className="bg-[#111111] rounded-3xl shadow-xl border border-slate-800 p-8">
             <div className="flex justify-between items-center mb-8 border-b pb-4">
-              <h2 className="text-2xl font-bold text-slate-800">Mock Test: {subject.toUpperCase()}</h2>
-              <div className="flex items-center gap-2 bg-red-50 text-red-600 px-4 py-2 rounded-xl font-bold shadow-inner">
+              <h2 className="text-2xl font-bold text-white">Mock Test: {subject.toUpperCase()}</h2>
+              <div className="flex items-center gap-2 bg-red-950/40 text-red-600 px-4 py-2 rounded-xl font-bold shadow-inner">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -1098,13 +1098,13 @@ export default function Home() {
 
             <div className="space-y-8">
               {quizQuestions.map((q, idx) => (
-                <div key={q.id} className="bg-slate-50 p-6 rounded-2xl border border-slate-100 shadow-sm">
-                  <p className="font-semibold text-lg text-slate-800 mb-4">{idx + 1}. {q.question}</p>
+                <div key={q.id} className="bg-[#0a0a0a] p-6 rounded-2xl border border-slate-800 shadow-sm">
+                  <p className="font-semibold text-lg text-white mb-4">{idx + 1}. {q.question}</p>
                   <div className="space-y-3">
                     {q.options.map((opt: string, oIdx: number) => (
-                      <label key={oIdx} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${userAnswers[q.id] === opt ? 'bg-blue-50 border-blue-500 shadow-sm' : 'bg-white border-slate-200 hover:bg-slate-50'}`}>
-                        <input type="radio" name={`q-${q.id}`} value={opt} checked={userAnswers[q.id] === opt} onChange={() => setUserAnswers(prev => ({...prev, [q.id]: opt}))} className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-slate-300" />
-                        <span className="text-slate-700 font-medium">{opt}</span>
+                      <label key={oIdx} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${userAnswers[q.id] === opt ? 'bg-cyan-950/40 border-blue-500 shadow-sm' : 'bg-[#111111] border-slate-800 hover:bg-[#0a0a0a]'}`}>
+                        <input type="radio" name={`q-${q.id}`} value={opt} checked={userAnswers[q.id] === opt} onChange={() => setUserAnswers(prev => ({...prev, [q.id]: opt}))} className="w-4 h-4 text-cyan-400 focus:ring-blue-500 border-slate-300" />
+                        <span className="text-slate-200 font-medium">{opt}</span>
                       </label>
                     ))}
                   </div>
@@ -1119,16 +1119,16 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-8">
-            <h2 className="text-3xl font-extrabold text-center text-slate-800 mb-2">Test Results</h2>
+          <div className="bg-[#111111] rounded-3xl shadow-xl border border-slate-800 p-8">
+            <h2 className="text-3xl font-extrabold text-center text-white mb-2">Test Results</h2>
             <div className="flex justify-center mb-8">
-              <div className="w-32 h-32 rounded-full border-8 border-slate-100 flex items-center justify-center relative">
+              <div className="w-32 h-32 rounded-full border-8 border-slate-800 flex items-center justify-center relative">
                 <div className="absolute inset-0 rounded-full border-8 border-blue-500" style={{ clipPath: `polygon(0 0, 100% 0, 100% ${(quizAnalysis.score / quizAnalysis.total) * 100}%, 0 ${(quizAnalysis.score / quizAnalysis.total) * 100}%)` }}></div>
-                <div className="text-3xl font-black text-slate-800 relative z-10">{quizAnalysis.score}/{quizAnalysis.total}</div>
+                <div className="text-3xl font-black text-white relative z-10">{quizAnalysis.score}/{quizAnalysis.total}</div>
               </div>
             </div>
             
-            <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6 mb-8 shadow-sm">
+            <div className="bg-cyan-950/40 border border-blue-100 rounded-2xl p-6 mb-8 shadow-sm">
               <h3 className="text-blue-800 font-bold text-lg mb-2 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-3.832-2.954C5.166 15.657 3 13.09 3 10.519 3 5.815 7.028 2 12 2c4.972 0 9 3.815 9 8.519 0 2.571-2.166 5.138-4.784 7.425a15.246 15.246 0 01-3.832 2.954l-.022.012-.007.003a.752.752 0 01-.708 0z" /></svg>
                 AI Feedback
@@ -1137,21 +1137,21 @@ export default function Home() {
             </div>
 
             <div className="space-y-6">
-              <h3 className="text-xl font-bold text-slate-800 mb-4">Detailed Analysis</h3>
+              <h3 className="text-xl font-bold text-white mb-4">Detailed Analysis</h3>
               {quizQuestions.map((q) => {
                 const ansObj = quizAnalysis.detailedAnalysis?.find((a: any) => a.questionId === q.id);
                 const isCorrect = ansObj?.isCorrect;
                 return (
-                  <div key={q.id} className={`p-6 rounded-2xl border ${isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                  <div key={q.id} className={`p-6 rounded-2xl border ${isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-950/40 border-red-200'}`}>
                     <div className="flex gap-3 mb-3">
                       {isCorrect ? <span className="text-2xl">✅</span> : <span className="text-2xl">❌</span>}
-                      <p className="font-semibold text-slate-800 text-lg">{q.question}</p>
+                      <p className="font-semibold text-white text-lg">{q.question}</p>
                     </div>
                     <div className="pl-9 space-y-2 text-sm font-medium">
-                      <p className="text-slate-600">Your Answer: <span className={isCorrect ? 'text-green-700 font-bold' : 'text-red-700 font-bold'}>{userAnswers[q.id] || "Not answered"}</span></p>
-                      {!isCorrect && <p className="text-slate-600">Correct Answer: <span className="text-green-700 font-bold">{q.correctAnswer}</span></p>}
-                      <div className="mt-4 p-4 bg-white/60 rounded-xl border border-white/40">
-                        <p className="text-slate-800 leading-relaxed"><strong>Explanation:</strong> {ansObj?.explanation}</p>
+                      <p className="text-slate-300">Your Answer: <span className={isCorrect ? 'text-green-700 font-bold' : 'text-red-700 font-bold'}>{userAnswers[q.id] || "Not answered"}</span></p>
+                      {!isCorrect && <p className="text-slate-300">Correct Answer: <span className="text-green-700 font-bold">{q.correctAnswer}</span></p>}
+                      <div className="mt-4 p-4 bg-[#111111]/60 rounded-xl border border-white/40">
+                        <p className="text-white leading-relaxed"><strong>Explanation:</strong> {ansObj?.explanation}</p>
                       </div>
                     </div>
                   </div>
@@ -1176,29 +1176,29 @@ export default function Home() {
       )}
 
       {/* Side Drawer for Test Config */}
-      <div className={`fixed inset-y-0 right-0 z-50 w-full sm:w-[420px] bg-white shadow-2xl border-l border-slate-100 transform transition-transform duration-300 ease-out flex flex-col ${showTestModal ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="flex justify-between items-center p-6 border-b border-slate-100 bg-slate-50/50">
-          <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 text-blue-600">
+      <div className={`fixed inset-y-0 right-0 z-50 w-full sm:w-[420px] bg-[#111111] shadow-2xl border-l border-slate-800 transform transition-transform duration-300 ease-out flex flex-col ${showTestModal ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="flex justify-between items-center p-6 border-b border-slate-800 bg-[#0a0a0a]/50">
+          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 text-cyan-400">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
             </svg>
             Mock Test Setup
           </h2>
-          <button onClick={() => setShowTestModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors bg-white hover:bg-slate-100 shadow-sm border border-slate-200 rounded-full p-2 active:scale-95">
+          <button onClick={() => setShowTestModal(false)} className="text-slate-400 hover:text-slate-300 transition-colors bg-[#111111] hover:bg-slate-100 shadow-sm border border-slate-800 rounded-full p-2 active:scale-95">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
         
-        <div className="flex-1 overflow-y-auto p-6 space-y-8 bg-slate-50/30">
+        <div className="flex-1 overflow-y-auto p-6 space-y-8 bg-[#0a0a0a]/30">
           <div>
-            <label className="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">1. Select Subject</label>
+            <label className="block text-sm font-bold text-slate-200 mb-3 uppercase tracking-wider">1. Select Subject</label>
             <div className="relative">
               <select
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className="w-full border border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 bg-white shadow-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium appearance-none"
+                className="w-full border border-slate-800 rounded-xl px-4 py-3.5 text-white bg-[#111111] shadow-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium appearance-none"
               >
                 <option value="physics">Physics</option>
                 <option value="chemistry">Chemistry</option>
@@ -1213,24 +1213,24 @@ export default function Home() {
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">2. Select Difficulty</label>
+            <label className="block text-sm font-bold text-slate-200 mb-3 uppercase tracking-wider">2. Select Difficulty</label>
             <div className="flex flex-col gap-3">
               {['Easy', 'Medium', 'Hard'].map((lvl) => (
                 <button
                   key={lvl}
                   onClick={() => setTestDifficulty(lvl)}
-                  className={`py-4 px-5 rounded-xl font-bold text-sm transition-all border text-left flex justify-between items-center ${testDifficulty === lvl ? 'bg-blue-50 text-blue-700 border-blue-500 shadow-md ring-1 ring-blue-500' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300'}`}
+                  className={`py-4 px-5 rounded-xl font-bold text-sm transition-all border text-left flex justify-between items-center ${testDifficulty === lvl ? 'bg-cyan-950/40 text-blue-700 border-blue-500 shadow-md ring-1 ring-blue-500' : 'bg-[#111111] text-slate-300 border-slate-800 hover:bg-[#0a0a0a] hover:border-slate-300'}`}
                 >
                   <span className="text-base">{lvl}</span>
                   {testDifficulty === lvl && (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-cyan-400">
                       <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
                     </svg>
                   )}
                 </button>
               ))}
             </div>
-            <div className="mt-5 p-4 rounded-xl bg-blue-50 border border-blue-100 shadow-inner">
+            <div className="mt-5 p-4 rounded-xl bg-cyan-950/40 border border-blue-100 shadow-inner">
               <p className="text-sm text-blue-800 font-medium leading-relaxed">
                 {testDifficulty === 'Easy' && '💡 Focuses on direct NCERT Board Level theory questions.'}
                 {testDifficulty === 'Medium' && '🚀 Focuses on JEE Main & NEET Level applications.'}
@@ -1240,7 +1240,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="p-6 border-t border-slate-100 bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.02)]">
+        <div className="p-6 border-t border-slate-800 bg-[#111111] shadow-[0_-4px_10px_rgba(0,0,0,0.02)]">
           <button 
             onClick={startMockTest} 
             className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 text-lg active:scale-[0.98]"
