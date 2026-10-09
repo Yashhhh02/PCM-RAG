@@ -95,12 +95,34 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Failed to process question. Please try again later." }, { status: 500 });
     }
 
-    // 2. Call match_chunks via Supabase
-    const { data: chunks, error: matchError } = await supabase.rpc('match_chunks', {
-      query_embedding: embedding,
-      match_count: 5,
-      filter_subject: subject
-    });
+    let chunks: any[] = [];
+    let matchError: any = null;
+
+    if (subject === 'all') {
+      const subjects = ['physics', 'chemistry', 'math'];
+      const promises = subjects.map(sub => supabase.rpc('match_chunks', {
+        query_embedding: embedding,
+        match_count: 5,
+        filter_subject: sub
+      }));
+      const results = await Promise.all(promises);
+      const errRes = results.find(r => r.error);
+      if (errRes) {
+        matchError = errRes.error;
+      } else {
+        const allData = results.flatMap(r => r.data || []);
+        allData.sort((a: any, b: any) => b.similarity - a.similarity);
+        chunks = allData.slice(0, 5);
+      }
+    } else {
+      const res = await supabase.rpc('match_chunks', {
+        query_embedding: embedding,
+        match_count: 5,
+        filter_subject: subject
+      });
+      chunks = res.data || [];
+      matchError = res.error;
+    }
 
     if (matchError) {
       console.error("Supabase RPC error:", matchError);
@@ -137,12 +159,29 @@ export async function POST(req: Request) {
       // 4. Fallback to Postgres FTS if LLMs fail
       if (answer.includes("All free AI models are currently busy")) {
         const ftsQuery = questionNormalized.split(' ').filter((w: string) => w.length > 2).join(' | ');
-        const { data: ftsChunks, error: ftsError } = await supabase
-          .from('chunks')
-          .select('chapter, page, content')
-          .eq('subject', subject)
-          .textSearch('content', ftsQuery)
-          .limit(3);
+        let ftsChunks: any[] = [];
+        let ftsError: any = null;
+
+        if (subject === 'all') {
+          const promises = ['physics', 'chemistry', 'math'].map(sub => supabase
+            .from('chunks')
+            .select('chapter, page, content')
+            .eq('subject', sub)
+            .textSearch('content', ftsQuery)
+            .limit(3)
+          );
+          const results = await Promise.all(promises);
+          ftsChunks = results.flatMap(r => r.data || []).slice(0, 3);
+        } else {
+          const res = await supabase
+            .from('chunks')
+            .select('chapter, page, content')
+            .eq('subject', subject)
+            .textSearch('content', ftsQuery)
+            .limit(3);
+          ftsChunks = res.data || [];
+          ftsError = res.error;
+        }
 
         if (!ftsError && ftsChunks && ftsChunks.length > 0) {
           answer = "AI is busy, showing NCERT text:\n\n" + ftsChunks.map((c, i) => `[Page ${c.page}] ${c.content.substring(0, 300)}...`).join('\n\n');

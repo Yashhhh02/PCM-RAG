@@ -57,7 +57,7 @@ export default function Home() {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [subject, setSubject] = useState("physics");
+  const [subject, setSubject] = useState("all");
   const [classNum, setClassNum] = useState("11");
   const [isLoading, setIsLoading] = useState(false);
   
@@ -686,9 +686,10 @@ export default function Home() {
                   onChange={(e) => setSubject(e.target.value)}
                   className="flex-1 sm:flex-none border border-slate-800 rounded-xl px-4 py-2 text-sm bg-[#111111] text-slate-200 outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all font-medium shadow-sm hover:bg-[#1a1a1a]"
                 >
-                  <option value="physics">Physics</option>
-                  <option value="chemistry">Chemistry</option>
-                  <option value="math">Mathematics</option>
+                  <option value="all">All Subjects (Auto)</option>
+                <option value="physics">Physics</option>
+                <option value="chemistry">Chemistry</option>
+                <option value="math">Mathematics</option>
                 </select>
                 <select
                   value={classNum}
@@ -1219,6 +1220,7 @@ export default function Home() {
                 onChange={(e) => setSubject(e.target.value)}
                 className="w-full border border-slate-800 rounded-xl px-4 py-3.5 text-white bg-[#111111] shadow-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium appearance-none"
               >
+                <option value="all">Mixed (Physics, Chemistry, Math)</option>
                 <option value="physics">Physics</option>
                 <option value="chemistry">Chemistry</option>
                 <option value="math">Mathematics</option>
