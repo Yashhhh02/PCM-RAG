@@ -20,10 +20,9 @@ export const maxDuration = 60; // Vercel free-plan limit
 
 const OPENROUTER_MODELS = [
   "google/gemma-4-31b-it:free",
-  "qwen/qwen3.8-27b:free",
-  "nvidia/nemotron-3-super-120b-a12b:free"
+  "google/gemma-4-26b-a4b-it:free"
 ];
-const GEMINI_FALLBACK_MODEL = "gemini-3.5-flash-lite";
+const GEMINI_FALLBACK_MODEL = "gemini-1.5-flash";
 
 // Simple in-memory cache for FREE-ONLY RULE
 const cache = new Map<string, any>();
