@@ -1202,7 +1202,7 @@ export default function Home() {
               >
                 <option value="physics">Physics</option>
                 <option value="chemistry">Chemistry</option>
-                <option value="maths" disabled>Mathematics (Coming Soon)</option>
+                <option value="math">Mathematics</option>
               </select>
               <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-400">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
