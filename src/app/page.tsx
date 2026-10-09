@@ -680,11 +680,30 @@ export default function Home() {
              </h1>
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+             <div className="flex space-x-3">
+                <select
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  className="flex-1 sm:flex-none border border-slate-800 rounded-xl px-4 py-2 text-sm bg-[#111111] text-slate-200 outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all font-medium shadow-sm hover:bg-[#1a1a1a]"
+                >
+                  <option value="physics">Physics</option>
+                  <option value="chemistry">Chemistry</option>
+                  <option value="math">Mathematics</option>
+                </select>
+                <select
+                  value={classNum}
+                  onChange={(e) => setClassNum(e.target.value)}
+                  className="flex-1 sm:flex-none border border-slate-800 rounded-xl px-4 py-2 text-sm bg-[#111111] text-slate-200 outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all font-medium shadow-sm hover:bg-[#1a1a1a]"
+                >
+                  <option value="11">Class 11</option>
+                  <option value="12">Class 12</option>
+                </select>
+             </div>
              <div className="hidden md:flex items-center gap-4 mr-2">
-                <div className="flex items-center gap-2 bg-orange-50 text-orange-600 px-3 py-1.5 rounded-full font-bold text-sm border border-orange-100 shadow-sm">
+                <div className="flex items-center gap-2 bg-orange-950/40 text-orange-500 px-3 py-1.5 rounded-full font-bold text-sm border border-orange-900 shadow-sm">
                    🔥 {dailyChallengeCompleted ? '1 Day Streak' : '0 Day Streak'}
                 </div>
-                <div className="flex items-center gap-2 bg-amber-950/40 text-amber-600 px-3 py-1.5 rounded-full font-bold text-sm border border-amber-100 shadow-sm">
+                <div className="flex items-center gap-2 bg-amber-950/40 text-amber-500 px-3 py-1.5 rounded-full font-bold text-sm border border-amber-900 shadow-sm">
                    🏆 0 Points
                 </div>
              </div>
