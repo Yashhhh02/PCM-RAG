@@ -691,6 +691,7 @@ export default function Home() {
                 <option value="chemistry">Chemistry</option>
                 <option value="math">Mathematics</option>
                 </select>
+                {userRole !== 'student' && (
                 <select
                   value={classNum}
                   onChange={(e) => setClassNum(e.target.value)}
@@ -699,6 +700,7 @@ export default function Home() {
                   <option value="11">Class 11</option>
                   <option value="12">Class 12</option>
                 </select>
+                )}
              </div>
              <div className="hidden md:flex items-center gap-4 mr-2">
                 <div className="flex items-center gap-2 bg-orange-950/40 text-orange-500 px-3 py-1.5 rounded-full font-bold text-sm border border-orange-900 shadow-sm">
