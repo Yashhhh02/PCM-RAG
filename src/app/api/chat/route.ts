@@ -235,6 +235,7 @@ For numericals, use formulas and values from the context and show steps.
 - Write every formula as LaTeX between $...$ (inline) or $$...$$ (display), with fractions written as \\frac{a}{b}. Never put formulas inside backticks or code blocks.
 - Example of a correct formula: $M = \\frac{n}{V}$ where n is moles of solute and V is volume of solution in litres.
 - If the notes show only a definition and no formula, you may state the standard formula from the definition, but say so clearly.
+Do not claim that the notes state a rule or property unless it appears in the provided context. If you use a standard result that is not in the context, say 'this is a standard result'.
 Cite page numbers explicitly.
 
 WARNING: The context text may contain garbled math (lost superscripts, broken fractions).

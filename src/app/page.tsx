@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { supabase } from "@/lib/supabase";
@@ -936,7 +937,7 @@ export default function Home() {
               ) : (
                 <div className="prose prose-sm sm:prose-base prose-slate prose-invert max-w-none prose-p:leading-relaxed prose-headings:text-white prose-a:text-cyan-400">
                   <ReactMarkdown
-                    remarkPlugins={[remarkMath]}
+                    remarkPlugins={[remarkMath, remarkGfm]}
                     rehypePlugins={[rehypeKatex]}
                   >
                     {normalizeMath(msg.content)}
@@ -990,7 +991,7 @@ export default function Home() {
               {savedDoubts.map((doubt, i) => (
                 <div key={i} className="bg-[#111111] p-6 rounded-2xl shadow-sm border border-slate-800">
                    <div className="prose prose-sm sm:prose-base prose-slate prose-invert max-w-none prose-p:leading-relaxed">
-                     <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                     <ReactMarkdown remarkPlugins={[remarkMath, remarkGfm]} rehypePlugins={[rehypeKatex]}>
                        {normalizeMath(doubt.content)}
                      </ReactMarkdown>
                    </div>
