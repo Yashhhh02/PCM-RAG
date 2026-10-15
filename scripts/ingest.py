@@ -10,6 +10,13 @@ from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -45,7 +52,7 @@ def clean_text(text: str) -> str:
     lines = [line.strip() for line in text.split('\n')]
     
     # Very basic header/footer removal (removing very short first/last lines)
-    if lines and len(lines[0]) < 20 and re.match(r'^[0-9]+$|^chapter|^physics|^chemistry|^math', lines[0].lower()):
+    if lines and len(lines[0]) < 20 and re.match(r'^[0-9]+$|^chapter|^physics|^chemistry|^math|^biology|^science', lines[0].lower()):
         lines = lines[1:]
     if lines and len(lines[-1]) < 20 and re.match(r'^[0-9]+$|^reprint', lines[-1].lower()):
         lines = lines[:-1]
@@ -231,6 +238,8 @@ def process_pdf(filepath: str, args, supabase: Client, gemini_client: genai.Clie
 def main():
     parser = argparse.ArgumentParser(description="Ingest NCERT PDFs into Supabase.")
     parser.add_argument("--dry-run", action="store_true", help="Extract and chunk only. No API calls or DB writes.")
+    parser.add_argument("--class", dest="class_num", type=int, help="Filter by class number (e.g. 10, 11, 12)")
+    parser.add_argument("--subject", type=str, help="Filter by subject (e.g. math, physics, chemistry, biology)")
     args = parser.parse_args()
 
     data_dir = "data"
@@ -249,10 +258,22 @@ def main():
     for root, dirs, files in os.walk(data_dir):
         for file in files:
             if file.lower().endswith(".pdf"):
-                pdf_files.append(os.path.join(root, file))
+                full_path = os.path.join(root, file)
+                parts = os.path.normpath(full_path).split(os.sep)
+                if len(parts) >= 4:
+                    subj = parts[-3].lower()
+                    class_str = parts[-2]
+                    class_match = re.search(r'\d+', class_str)
+                    c_num = int(class_match.group()) if class_match else 0
+                    
+                    if args.class_num and c_num != args.class_num:
+                        continue
+                    if args.subject and subj != args.subject.lower():
+                        continue
+                pdf_files.append(full_path)
                 
     if not pdf_files:
-        logging.info(f"No PDFs found in the '{data_dir}' directory.")
+        logging.info(f"No matching PDFs found in the '{data_dir}' directory.")
         return
         
     logging.info(f"Found {len(pdf_files)} PDF(s) to process.")

@@ -98,7 +98,7 @@ export async function POST(req: Request) {
     let matchError: any = null;
 
     if (subject === 'all') {
-      const subjects = ['physics', 'chemistry', 'math'];
+      const subjects = ['physics', 'chemistry', 'math', 'biology'];
       const promises = subjects.map(sub => supabase.rpc('match_chunks', {
         query_embedding: embedding,
         match_count: 5,
@@ -225,7 +225,7 @@ export async function POST(req: Request) {
 
 // 6. Keep the LLM call in one small function, with retry and backoff across multiple models
 async function callOpenRouterWithRetry(question: string, context: string): Promise<string> {
-  const prompt = `You are a helpful PCM tutor for class 11-12 students (India, NCERT syllabus).
+  const prompt = `You are a helpful PCMB tutor for class 10-12 students (India, NCERT syllabus).
 Answer only using the provided context chunks.
 If the context does not contain the answer, reply with exactly: "Not found in notes. Try rephrasing or pick the right subject/chapter."
 Use the 'Not found in notes' sentence ONLY as your entire reply. Never add it after an answer.

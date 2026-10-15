@@ -168,6 +168,7 @@ export default function TeacherDashboard({ session, handleLogout }: { session: a
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Class</label>
                     <select className="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-800 bg-slate-50 outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
+                      <option>Class 10</option>
                       <option>Class 11</option>
                       <option>Class 12</option>
                     </select>

@@ -491,6 +491,7 @@ export default function Home() {
                       <div>
                         <label className="block text-sm font-semibold text-slate-300 mb-1.5">Class / Standard</label>
                         <select value={studentClass} onChange={e => setStudentClass(e.target.value)} className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 bg-white/50 backdrop-blur-sm transition-all">
+                          <option value="Class 10">Class 10</option>
                           <option value="Class 11">Class 11</option>
                           <option value="Class 12">Class 12</option>
                           <option value="Dropper">Dropper (JEE/NEET)</option>
@@ -691,6 +692,7 @@ export default function Home() {
                 <option value="physics">Physics</option>
                 <option value="chemistry">Chemistry</option>
                 <option value="math">Mathematics</option>
+                <option value="biology">Biology</option>
                 </select>
                 {userRole !== 'student' && (
                 <select
@@ -698,6 +700,7 @@ export default function Home() {
                   onChange={(e) => setClassNum(e.target.value)}
                   className="flex-1 sm:flex-none border border-slate-800 rounded-xl px-4 py-2 text-sm bg-[#111111] text-slate-200 outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all font-medium shadow-sm hover:bg-[#1a1a1a]"
                 >
+                  <option value="10">Class 10</option>
                   <option value="11">Class 11</option>
                   <option value="12">Class 12</option>
                 </select>

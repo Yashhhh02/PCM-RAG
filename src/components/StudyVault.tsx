@@ -73,6 +73,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
             className="border-slate-800 rounded-lg text-sm font-semibold text-slate-300 px-3 py-2 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all shadow-none"
           >
             <option value="All">All Grades</option>
+            <option value="10">Class 10</option>
             <option value="11">Class 11</option>
             <option value="12">Class 12</option>
           </select>
@@ -85,6 +86,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
             <option value="Physics">Physics</option>
             <option value="Chemistry">Chemistry</option>
             <option value="Math">Math</option>
+            <option value="Biology">Biology</option>
           </select>
         </div>
       </div>
@@ -97,13 +99,14 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
                 <div key={i} onClick={() => handleOpenFolder(c)} className={`bg-[#111111] rounded-2xl border-2 p-5 flex flex-col justify-between transition-transform hover:-translate-y-1 hover:shadow-none cursor-pointer
                   ${c.subject.toLowerCase() === 'math' ? 'border-purple-500/30 hover:border-purple-500/60 shadow-none' : 
                     c.subject.toLowerCase() === 'physics' ? 'border-cyan-500/30 hover:border-cyan-500/60 shadow-none' : 
+                    c.subject.toLowerCase() === 'biology' ? 'border-emerald-500/30 hover:border-emerald-500/60 shadow-none' :
                     'border-amber-500/30 hover:border-amber-500/60 shadow-none'}`}>
                   
                   <div>
                     <div className="flex justify-between items-center mb-4">
                       <div className="flex gap-2">
-                        <span className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase ${c.subject.toLowerCase() === 'math' ? 'bg-purple-900/20 text-purple-400' : c.subject.toLowerCase() === 'physics' ? 'bg-cyan-900/20 text-cyan-400' : 'bg-amber-900/20 text-amber-400'}`}>Class {c.class}</span>
-                        <span className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase ${c.subject.toLowerCase() === 'math' ? 'bg-purple-900/20 text-purple-400' : c.subject.toLowerCase() === 'physics' ? 'bg-cyan-900/20 text-cyan-400' : 'bg-amber-900/20 text-amber-400'}`}>{c.subject}</span>
+                        <span className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase ${c.subject.toLowerCase() === 'math' ? 'bg-purple-900/20 text-purple-400' : c.subject.toLowerCase() === 'physics' ? 'bg-cyan-900/20 text-cyan-400' : c.subject.toLowerCase() === 'biology' ? 'bg-emerald-900/20 text-emerald-400' : 'bg-amber-900/20 text-amber-400'}`}>Class {c.class}</span>
+                        <span className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase ${c.subject.toLowerCase() === 'math' ? 'bg-purple-900/20 text-purple-400' : c.subject.toLowerCase() === 'physics' ? 'bg-cyan-900/20 text-cyan-400' : c.subject.toLowerCase() === 'biology' ? 'bg-emerald-900/20 text-emerald-400' : 'bg-amber-900/20 text-amber-400'}`}>{c.subject}</span>
                       </div>
                       <span className="text-xs font-bold text-slate-400 flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
@@ -114,7 +117,7 @@ export default function StudyVault({ isStudentView }: { isStudentView?: boolean 
                     </div>
 
                     <div className="flex gap-4 items-start">
-                      <div className={`p-3 rounded-xl flex-shrink-0 ${c.subject.toLowerCase() === 'math' ? 'bg-purple-900/20 text-purple-400' : c.subject.toLowerCase() === 'physics' ? 'bg-cyan-900/20 text-cyan-400' : 'bg-amber-900/20 text-amber-400'}`}>
+                      <div className={`p-3 rounded-xl flex-shrink-0 ${c.subject.toLowerCase() === 'math' ? 'bg-purple-900/20 text-purple-400' : c.subject.toLowerCase() === 'physics' ? 'bg-cyan-900/20 text-cyan-400' : c.subject.toLowerCase() === 'biology' ? 'bg-emerald-900/20 text-emerald-400' : 'bg-amber-900/20 text-amber-400'}`}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                         </svg>
